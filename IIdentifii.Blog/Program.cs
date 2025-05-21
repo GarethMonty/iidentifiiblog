@@ -1,12 +1,19 @@
+using IIdentifii.Blog.Repository;
 
 namespace IIdentifii.Blog
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
-            var builder = WebApplication.CreateBuilder(args);
+            WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
+            builder.Services
+                .AddAuthServices(builder.Configuration)
+                .AddBusinessLogicServices()
+                .AddCacheServices()
+                .AddAuthRepositoryServices(builder.Configuration)
+                .AddRepositoryServices(builder.Configuration);
 
             builder.Services.AddControllers();
 
@@ -21,6 +28,11 @@ namespace IIdentifii.Blog
                 app.MapOpenApi();
             }
 
+            app.UseHttpsRedirection();
+            app.UseStaticFiles();
+
+            app.UseRouting();
+
             app.UseAuthentication();
             app.UseAuthorization();
 
@@ -29,6 +41,8 @@ namespace IIdentifii.Blog
             app.MapControllers();
 
             app.Run();
+
+            await SeedHelpers.SeedRolesAndUsersAsync(app.Services);
         }
     }
 }

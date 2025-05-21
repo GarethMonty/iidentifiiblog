@@ -9,12 +9,15 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="9.0.5" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.5" />
+	<PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.5" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="DTOs\" />
     <Folder Include="Helpers\" />
-    <Folder Include="Extensions\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="Microsoft.AspNetCore.Identity" />
   </ItemGroup>
 
 </Project>

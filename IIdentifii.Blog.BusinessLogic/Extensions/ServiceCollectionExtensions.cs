@@ -1,4 +1,6 @@
-﻿namespace Microsoft.Extensions.DependencyInjection
+﻿using IIdentifii.Blog.BusinessLogic;
+
+namespace Microsoft.Extensions.DependencyInjection
 {
     public static class ServiceCollectionExtensions
     {
@@ -6,6 +8,9 @@
             this IServiceCollection services)
         {
             
+            services
+                .AddScoped<IAuthService, AuthService>();
+
             return services;
         }
     }

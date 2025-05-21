@@ -1,12 +1,25 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using IIdentifii.Blog.Shared;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
-namespace IIdentifii.Blog.Extensions
+namespace Microsoft.Extensions.DependencyInjection
 {
     public static class ServiceCollectionExtensions
     {
         public static IServiceCollection AddAuthServices(
-            this IServiceCollection services)
+            this IServiceCollection services, 
+            IConfiguration configuration)
         {
+            AuthSettings? settings = configuration.GetSection(AuthSettings.Key).Get<AuthSettings>();
+
+            if (settings == null)
+            {
+                throw new ArgumentNullException($"Configuration section '{AuthSettings.Key}' is not configured.");
+            }
+
+            settings.Validate();
+
             services.Configure<IdentityOptions>(options =>
             {
                 // Password settings.
@@ -23,8 +36,7 @@ namespace IIdentifii.Blog.Extensions
                 options.Lockout.AllowedForNewUsers = true;
 
                 // User settings.
-                options.User.AllowedUserNameCharacters =
-                "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
+                options.User.AllowedUserNameCharacters = settings.AllowedUserNameCharacters
                 options.User.RequireUniqueEmail = false;
             });
 
@@ -34,10 +46,35 @@ namespace IIdentifii.Blog.Extensions
                 options.Cookie.HttpOnly = true;
                 options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
 
-                options.LoginPath = "/Identity/Account/Login";
-                options.AccessDeniedPath = "/Identity/Account/AccessDenied";
+                options.LoginPath = settings.LoginPath;
+                options.AccessDeniedPath = settings.AccessDeniedPath;
                 options.SlidingExpiration = true;
             });
+
+            services
+                .AddAuthentication(options =>
+                {
+                    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                })
+                //UI Cookie Auth
+                //.AddCookie(IdentityConstants.ApplicationScheme)
+                //JWT Bearer Auth
+                .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
+                {
+                    byte[] key = Encoding.UTF8.GetBytes(settings.Secret);
+
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidateLifetime = true,
+                        ValidateIssuerSigningKey = true,
+                        ValidIssuer = settings.Issuer,
+                        ValidAudience = settings.Audience,
+                        IssuerSigningKey = new SymmetricSecurityKey(key)
+                    };
+                });
 
             return services;
         }

@@ -1,8 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Identity;
-
-namespace Microsoft.Extensions.DependencyInjection
+﻿namespace Microsoft.Extensions.DependencyInjection
 {
     public static class ServiceCollectionExtensions
     {
@@ -27,12 +23,22 @@ namespace Microsoft.Extensions.DependencyInjection
             this IServiceCollection services,
             IConfiguration configuration)
         {
+            string? connectionString = configuration.GetConnectionString("Sql");
+
+            if (string.IsNullOrEmpty(connectionString))
+            {
+                throw new ArgumentNullException("Connection string 'Sql' is not configured.");
+            }
+
             services
-                .AddDefaultIdentity<IdentityUser>(
-                    options => 
-                        options.SignIn.RequireConfirmedAccount = true
-                )
-                .AddUserStore<AuthDbContext>();
+                .AddDbContext<AuthDbContext>(
+                    options => options.UseSqlServer(connectionString)
+                );
+
+            services
+                .AddDefaultIdentity<IIdentifiiUser>(options => options.SignIn.RequireConfirmedAccount = true)
+                .AddEntityFrameworkStores<AuthDbContext>()
+                .AddDefaultTokenProviders();
 
             return services;
         }
