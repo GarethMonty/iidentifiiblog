@@ -12,6 +12,8 @@ namespace IIdentifii.Blog
 
             builder.Services.AddOpenApi();
 
+            builder.Services.AddRazorPages();
+
             var app = builder.Build();
 
             if (app.Environment.IsDevelopment())
@@ -19,10 +21,10 @@ namespace IIdentifii.Blog
                 app.MapOpenApi();
             }
 
-            app.UseHttpsRedirection();
-
+            app.UseAuthentication();
             app.UseAuthorization();
 
+            app.MapRazorPages();
 
             app.MapControllers();
 
