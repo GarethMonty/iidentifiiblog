@@ -24,11 +24,8 @@
     <Using Include="Microsoft.AspNetCore.Identity" />
     <Using Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" />
     <Using Include="Microsoft.EntityFrameworkCore" />
+    <Using Include="Microsoft.EntityFrameworkCore.Metadata.Builders" />
     <Using Include="Microsoft.Extensions.Configuration" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="ModelConfigs\" />
   </ItemGroup>
 
 </Project>

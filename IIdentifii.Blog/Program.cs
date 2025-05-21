@@ -10,6 +10,7 @@ namespace IIdentifii.Blog
 
             builder.Services
                 .AddAuthServices(builder.Configuration)
+                .AddContextServices()
                 .AddBusinessLogicServices()
                 .AddCacheServices()
                 .AddAuthRepositoryServices(builder.Configuration)

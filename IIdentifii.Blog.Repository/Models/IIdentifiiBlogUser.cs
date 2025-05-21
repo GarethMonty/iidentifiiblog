@@ -1,4 +1,4 @@
-﻿namespace IIdentifii.Blog.Shared
+﻿namespace IIdentifii.Blog.Repository
 {
     public class IIdentifiiUser : IdentityUser<Guid>
     {

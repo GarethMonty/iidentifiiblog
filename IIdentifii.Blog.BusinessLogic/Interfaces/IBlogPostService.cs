@@ -1,0 +1,29 @@
+﻿namespace IIdentifii.Blog.BusinessLogic
+{
+    public interface IBlogPostService
+    {
+        Task<ApiResponse<List<BlogPost>>> GetBlogPostsAsync(
+            BlogPostRequest request,
+            CancellationToken token);
+
+        Task<ApiResponse<List<BlogPost>>> GetBlogPostsForAuthorAsync(
+            BlogPostRequest request,
+            CancellationToken token);
+
+        Task<ApiResponse<BlogPost>> GetBlogPostAsync(
+            Guid id,
+            CancellationToken token);
+
+        Task<ApiResponse<BlogPost>> CreateBlogPostAsync(
+            CreateBlogPostRequest createRequest,
+            CancellationToken token);
+
+        Task<ApiResponse<BlogPost>> UpdateBlogPostAsync(
+            UpdateBlogPostRequest updateRequest,
+            CancellationToken token);
+
+        Task<ApiResponse<bool>> DeleteBlogPostAsync(
+            Guid id,
+            CancellationToken token);
+    }
+}

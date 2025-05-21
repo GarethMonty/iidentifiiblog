@@ -1,6 +1,4 @@
-﻿using IIdentifii.Blog.BusinessLogic;
-
-namespace Microsoft.Extensions.DependencyInjection
+﻿namespace Microsoft.Extensions.DependencyInjection
 {
     public static class ServiceCollectionExtensions
     {
@@ -9,7 +7,12 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             
             services
-                .AddScoped<IAuthService, AuthService>();
+                .AddScoped<IAuthService, AuthService>()
+                .AddScoped<IRequestContextService, RequestContextService>()
+                .AddScoped<IBlogPostService, BlogPostService>()
+                .AddScoped<ICommentService, CommentService>()
+                .AddScoped<ILikeService, LikeService>()
+                .AddScoped<IModerationService, ModerationService>();
 
             return services;
         }

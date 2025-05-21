@@ -1,4 +1,5 @@
-﻿using IIdentifii.Blog.Shared;
+﻿using IIdentifii.Blog.Repository;
+using IIdentifii.Blog.Shared;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;

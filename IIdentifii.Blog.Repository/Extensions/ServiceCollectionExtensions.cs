@@ -16,6 +16,12 @@
             services.AddDbContext<BlogDbContext>(options =>
                 options.UseSqlServer(connectionString));
 
+            services
+                .AddScoped<IBlogPostRepository, BlogPostRepository>()
+                .AddScoped<ICommentRepository, CommentRepository>()
+                .AddScoped<ILikeRepository, LikeRepository>()
+                .AddScoped<IModerationRepository, ModerationRepository>();
+
             return services;
         }
 

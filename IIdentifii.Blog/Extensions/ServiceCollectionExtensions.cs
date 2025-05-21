@@ -36,7 +36,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 options.Lockout.AllowedForNewUsers = true;
 
                 // User settings.
-                options.User.AllowedUserNameCharacters = settings.AllowedUserNameCharacters
+                options.User.AllowedUserNameCharacters = settings.AllowedUserNameCharacters;
                 options.User.RequireUniqueEmail = false;
             });
 
@@ -75,6 +75,15 @@ namespace Microsoft.Extensions.DependencyInjection
                         IssuerSigningKey = new SymmetricSecurityKey(key)
                     };
                 });
+
+            return services;
+        }
+
+        public static IServiceCollection AddContextServices(
+            this IServiceCollection services)
+        {
+            services
+                .AddHttpContextAccessor();
 
             return services;
         }

@@ -10,4 +10,12 @@
     <ProjectReference Include="..\IIdentifii.Blog.Cache\IIdentifii.Blog.Cache.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Using Include="IIdentifii.Blog.BusinessLogic" />
+    <Using Include="IIdentifii.Blog.Repository" />
+    <Using Include="IIdentifii.Blog.Shared" />
+    <Using Include="Mapster" />
+    <Using Include="Microsoft.AspNetCore.Http" />
+  </ItemGroup>
+
 </Project>

@@ -6,7 +6,13 @@ namespace IIdentifii.Blog.Controllers
     [Route("[controller]")]
     public class BlogController : ControllerBase
     {
+        #region Fields
+
         private readonly ILogger<BlogController> _logger;
+
+        #endregion
+
+        #region Constructor Methods
 
         public BlogController(
             ILogger<BlogController> logger)
@@ -14,10 +20,21 @@ namespace IIdentifii.Blog.Controllers
             _logger = logger;
         }
 
-        [HttpGet(Name = "GetWeatherForecast")]
-        public IActionResult Get()
+        #endregion
+
+        [HttpGet]
+        public IActionResult GetBlogPostsAsync(
+            CancellationToken token)
         {
             return Ok();
         }
+
+        [HttpGet]
+        public IActionResult GetBlogPostAsync()
+        {
+            return Ok();
+        }
+
+
     }
 }

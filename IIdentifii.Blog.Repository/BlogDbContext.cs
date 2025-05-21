@@ -8,7 +8,7 @@
 
         public DbSet<LikeModel> Likes => Set<LikeModel>();
 
-        public DbSet<ModeratorFlagModel> ModeratorFlags => Set<ModeratorFlagModel>();
+        public DbSet<ModeratorFlagModel> Moderations => Set<ModeratorFlagModel>();
 
         public BlogDbContext(
             DbContextOptions<BlogDbContext> options)
@@ -24,7 +24,6 @@
             builder.ApplyConfiguration(new LikeConfig());
             builder.ApplyConfiguration(new CommentConfig());
             builder.ApplyConfiguration(new ModeratorFlagConfig());
-            builder.ApplyConfiguration(new AuthorConfig());
         }
     }
 }

@@ -1,6 +1,4 @@
-﻿using IIdentifii.Blog.Shared;
-
-namespace IIdentifii.Blog.BusinessLogic
+﻿namespace IIdentifii.Blog.BusinessLogic
 {
     public interface IAuthService
     {

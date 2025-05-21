@@ -1,6 +1,4 @@
-﻿using System.Text.Json.Serialization;
-
-namespace IIdentifii.Blog.Shared
+﻿namespace IIdentifii.Blog.Shared
 {
     public class ApiResponse<T>
     {

@@ -1,9 +1,12 @@
 ﻿namespace IIdentifii.Blog.Shared
 {
-    public record BlogPostRequest
+    public record CommentRequest
     {
-        [JsonPropertyName("authorId")]
-        public Guid? AuthorId { get; set; }
+        [JsonPropertyName("blogPostId")]
+        public Guid? BlogPostId { get; set; }
+
+        [JsonPropertyName("userId")]
+        public Guid? UserId { get; set; }
 
         [JsonPropertyName("dateFilter")]
         public DateFilterRequest? DateFilter { get; set; }
