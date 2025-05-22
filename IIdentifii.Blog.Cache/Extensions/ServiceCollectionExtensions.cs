@@ -6,6 +6,12 @@
             this IServiceCollection services)
         {
             
+            services
+                .AddMemoryCache(options =>
+                {
+                    options.SizeLimit = 1024 * 1024 * 100; // 100 MB
+                });
+
             return services;
         }
     }

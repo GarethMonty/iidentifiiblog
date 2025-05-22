@@ -11,8 +11,11 @@
                 .AddScoped<IRequestContextService, RequestContextService>()
                 .AddScoped<IBlogPostService, BlogPostService>()
                 .AddScoped<ICommentService, CommentService>()
-                .AddScoped<ILikeService, LikeService>()
-                .AddScoped<IModerationService, ModerationService>();
+                .AddScoped<IReactionService, ReactionService>()
+                .AddScoped<ITagService, TagService>();
+
+            services
+                .AddSingleton<IReactionService, ReactionService>();
 
             return services;
         }

@@ -1,11 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
-
-namespace IIdentifii.Blog.Repository
+﻿namespace IIdentifii.Blog.Repository
 {
     public class BlogPostConfig : IEntityTypeConfiguration<BlogPostModel>
     {
         public void Configure(EntityTypeBuilder<BlogPostModel> builder)
         {
+            builder.ToTable("BlogPosts");
+
             builder.HasKey(p => p.Id);
 
             builder.Property(p => p.Title)

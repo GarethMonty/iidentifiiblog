@@ -23,5 +23,26 @@
         public IIdentifiiUser User { get; set; }
 
         #endregion
+
+        #region Methods
+
+        public static CommentModel CreateSeedComment(
+            Guid id,
+            Guid userId,
+            Guid blogPostId,
+            string content = "This is a sample comment content.")
+        {
+            CommentModel commentModel = new CommentModel()
+            {
+                Id = id,
+                Content = content,
+                CreatedAt = DateTime.UtcNow,
+                UserId = userId,
+                BlogPostId = blogPostId
+            };
+            return commentModel;
+        }
+
+        #endregion
     }
 }

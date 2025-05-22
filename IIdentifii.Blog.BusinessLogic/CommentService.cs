@@ -4,8 +4,6 @@
     {
         #region Fields
 
-        private readonly IRequestContextService _requestContextService;
-
         private readonly ICommentRepository _commentRepository;
 
         #endregion
@@ -13,11 +11,8 @@
         #region Constructor Methods
 
         public CommentService(
-            IRequestContextService requestContextService,
             ICommentRepository commentRepository)
         {
-            _requestContextService = requestContextService;
-
             _commentRepository = commentRepository;
         }
 
@@ -50,13 +45,9 @@
 
         public async Task<ApiResponse<Comment>> CreateCommentAsync(
             CreateCommentRequest createRequest,
+            Guid userId,
             CancellationToken token)
         {
-            if (!_requestContextService.TryGetUserId(out Guid userId))
-            {
-                return ApiResponse<Comment>.Failure($"User not found");
-            }
-
             CommentModel model = new CommentModel()
             {
                 Id = Guid.CreateVersion7(),
@@ -73,6 +64,7 @@
 
         public async Task<ApiResponse<Comment>> UpdateCommentAsync(
             UpdateCommentRequest updateRequest,
+            Guid userId,
             CancellationToken token)
         {
             CommentModel? model = await _commentRepository.GetCommentByIdAsync(updateRequest.Id, token);
@@ -91,6 +83,7 @@
 
         public async Task<ApiResponse<bool>> DeleteCommentAsync(
             Guid commentId,
+            Guid userId,
             CancellationToken token)
         {
             CommentModel? model = await _commentRepository.GetCommentByIdAsync(commentId, token);

@@ -1,7 +1,4 @@
-﻿using IIdentifii.Blog.Shared;
-using Microsoft.AspNetCore.Mvc;
-
-namespace IIdentifii.Blog.Extensions
+﻿namespace IIdentifii.Blog.Shared
 {
     public static class ResponseExtensions
     {

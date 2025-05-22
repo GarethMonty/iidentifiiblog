@@ -1,11 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
-
-namespace IIdentifii.Blog.Repository
+﻿namespace IIdentifii.Blog.Repository
 {
     public class CommentConfig : IEntityTypeConfiguration<CommentModel>
     {
         public void Configure(EntityTypeBuilder<CommentModel> builder)
         {
+            builder.ToTable("Comments");
+
             builder.HasKey(c => c.Id);
 
             builder.Property(c => c.Content)
@@ -17,7 +17,8 @@ namespace IIdentifii.Blog.Repository
 
             builder.HasOne(c => c.BlogPost)
                 .WithMany(p => p.Comments)
-                .HasForeignKey(c => c.BlogPostId);
+                .HasForeignKey(c => c.BlogPostId)
+                .OnDelete(DeleteBehavior.NoAction);
 
             builder.HasOne(c => c.User)
                 .WithMany()

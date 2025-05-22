@@ -1,41 +1,59 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
-  <PropertyGroup>
-    <TargetFramework>net9.0</TargetFramework>
-    <Nullable>enable</Nullable>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <RuntimeIdentifiers>linux-x64</RuntimeIdentifiers>
-    <ContainerRuntimeIdentifier>linux-x64</ContainerRuntimeIdentifier>
-    <EnableSdkContainerDebugging>True</EnableSdkContainerDebugging>
-    <ContainerBaseImage>mcr.microsoft.com/dotnet/aspnet:9.0</ContainerBaseImage>
-    <UserSecretsId>655cd0d6-3503-4913-a14b-eaf2a776e4c3</UserSecretsId>
-    <DockerfileContext>.</DockerfileContext>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net9.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<RuntimeIdentifiers>linux-x64</RuntimeIdentifiers>
+		<ContainerRuntimeIdentifier>linux-x64</ContainerRuntimeIdentifier>
+		<EnableSdkContainerDebugging>True</EnableSdkContainerDebugging>
+		<ContainerBaseImage>mcr.microsoft.com/dotnet/aspnet:9.0</ContainerBaseImage>
+		<UserSecretsId>655cd0d6-3503-4913-a14b-eaf2a776e4c3</UserSecretsId>
+		<DockerfileContext>.</DockerfileContext>
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+		<NoWarn>$(NoWarn);1591</NoWarn>
+	</PropertyGroup>
 
-	
 	<ItemGroup>
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.5" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.5">
-		  <PrivateAssets>all</PrivateAssets>
-		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 		<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="9.0.0" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.5">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
+		<PackageReference Include="Swashbuckle.AspNetCore.ReDoc" Version="8.1.1" />
+		<PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="8.1.1" />
+		<PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="8.1.1" />
 	</ItemGroup>
-	
-  <ItemGroup>
-    <ContainerPort Include="8081" />
-  </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\IIdentifii.Blog.BusinessLogic\IIdentifii.Blog.BusinessLogic.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<ContainerPort Include="8081" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <Using Include="Microsoft.AspNetCore.Identity" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\IIdentifii.Blog.BusinessLogic\IIdentifii.Blog.BusinessLogic.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Using Include="IIdentifii.Blog" />
+		<Using Include="IIdentifii.Blog.BusinessLogic" />
+		<Using Include="IIdentifii.Blog.Repository" />
+		<Using Include="IIdentifii.Blog.Shared" />
+		<Using Include="Microsoft.AspNetCore.Authentication.JwtBearer" />
+		<Using Include="Microsoft.AspNetCore.Authorization" />
+		<Using Include="Microsoft.AspNetCore.Identity" />
+		<Using Include="Microsoft.AspNetCore.Mvc" />
+		<Using Include="Microsoft.FeatureManagement" />
+		<Using Include="Microsoft.FeatureManagement.Mvc" />
+		<Using Include="Microsoft.IdentityModel.Tokens" />
+		<Using Include="Microsoft.OpenApi.Models" />
+		<Using Include="System.Reflection" />
+		<Using Include="System.Text" />
+		<Using Include="System.Threading.Channels" />
+	</ItemGroup>
 
 </Project>

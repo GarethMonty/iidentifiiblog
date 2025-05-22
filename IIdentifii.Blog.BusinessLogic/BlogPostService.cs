@@ -68,9 +68,7 @@
 
             BlogPostModel model = createRequest.Adapt<BlogPostModel>();
 
-            model.Id = Guid.CreateVersion7();
-            model.AuthorId = userId;
-            model.PostedAt = DateTime.UtcNow;
+            model.SetupForCreate(userId);
 
             model = await _blogPostRepository.CreateBlogPostAsync(model, token);
 

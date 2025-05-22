@@ -4,6 +4,8 @@
     {
         #region Fields
 
+        private readonly AppDbContext _dbContext;
+
         private readonly DbSet<CommentModel> _set;
 
         #endregion
@@ -11,8 +13,10 @@
         #region Constructor Methods
 
         public CommentRepository(
-            BlogDbContext blogDbContext)
+            AppDbContext blogDbContext)
         {
+            _dbContext = blogDbContext;
+
             _set = blogDbContext.Comments;
         }
 
@@ -80,6 +84,8 @@
 
             await _set.AddAsync(comment, token);
 
+            await _dbContext.SaveChangesAsync(token);
+
             return comment;
         }
 
@@ -90,6 +96,8 @@
             ArgumentNullException.ThrowIfNull(comment, nameof(comment));
 
             _set.Update(comment);
+
+            await _dbContext.SaveChangesAsync(token);
 
             return comment;
         }
@@ -103,6 +111,8 @@
             if (comment != null)
             {
                 _set.Remove(comment);
+
+                await _dbContext.SaveChangesAsync(token);
             }
 
             return comment != null;

@@ -1,4 +1,6 @@
-﻿namespace IIdentifii.Blog.BusinessLogic
+﻿using static System.Net.WebRequestMethods;
+
+namespace IIdentifii.Blog.BusinessLogic
 {
     public class RequestContextService : IRequestContextService
     {
@@ -9,9 +11,9 @@
 
         #region Properties
 
-        public string? UserId => _httpContextAccessor.HttpContext?.User.FindFirst("sub")?.Value;
+        public string? UserId => _httpContextAccessor.HttpContext?.User.FindFirst("sub")?.Value ?? _httpContextAccessor.HttpContext?.User.FindFirst("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier")?.Value;
 
-        public string? UserName => _httpContextAccessor.HttpContext?.User.FindFirst("name")?.Value;
+        public string? UserName => _httpContextAccessor.HttpContext?.User.FindFirst("name")?.Value ?? _httpContextAccessor.HttpContext?.User.FindFirst("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress")?.Value;
 
         #endregion
 

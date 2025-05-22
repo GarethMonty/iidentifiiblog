@@ -1,6 +1,4 @@
-﻿using System.Text.Json.Serialization;
-
-namespace IIdentifii.Blog.Shared
+﻿namespace IIdentifii.Blog.Shared
 {
     public record AuthSettings
     {

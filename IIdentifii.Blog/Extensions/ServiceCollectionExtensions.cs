@@ -1,7 +1,4 @@
-﻿using IIdentifii.Blog.Shared;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
+﻿using IIdentifii.Blog.Repository;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -52,13 +49,20 @@ namespace Microsoft.Extensions.DependencyInjection
             });
 
             services
+                .AddIdentity<IIdentifiiUser, IdentityRole<Guid>>(options =>
+                {
+                    options.SignIn.RequireConfirmedAccount = true;
+                })
+                .AddEntityFrameworkStores<AppDbContext>()
+                .AddDefaultTokenProviders()
+                .AddDefaultUI();
+
+            services
                 .AddAuthentication(options =>
                 {
                     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
                 })
-                //UI Cookie Auth
-                //.AddCookie(IdentityConstants.ApplicationScheme)
                 //JWT Bearer Auth
                 .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
                 {
@@ -87,5 +91,71 @@ namespace Microsoft.Extensions.DependencyInjection
 
             return services;
         }
+
+        public static IServiceCollection AddDocumentationServices(
+            this IServiceCollection services)
+        {
+            services.AddEndpointsApiExplorer();
+
+            services.AddSwaggerGen(c =>
+            {
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    Description = "JWT Authorization header using the Bearer scheme. \r\n\r\n " +
+                                  "Enter 'Bearer' [space] and then your token in the text input below.\r\n\r\n" +
+                                  "Example: 'Bearer abc123token'",
+                    Name = "Authorization",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.Http,
+                    Scheme = "bearer",
+                    BearerFormat = "JWT"
+                });
+
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "Bearer"
+                            }
+                        },
+                        Array.Empty<string>()
+                    }
+                });
+                string xmlPath = Path.Combine(AppContext.BaseDirectory, $"{Assembly.GetExecutingAssembly().GetName().Name}.xml");
+                c.IncludeXmlComments(xmlPath);
+
+                string sharedXmlPath = Path.Combine(AppContext.BaseDirectory, "IIdentifii.Blog.Shared.xml");
+                c.IncludeXmlComments(sharedXmlPath);
+            });
+
+            services.AddOpenApi();
+
+            return services;
+        }
+
+        public static IServiceCollection AddFeatureFlagServices(
+            this IServiceCollection services)
+        {
+            services
+                .AddFeatureManagement()
+                .WithTargeting()
+                .UseDisabledFeaturesHandler(new ApiFeatureNotAvailableHandler());
+
+            return services;
+        }
+
+        public static IServiceCollection AddBackgroundProcessingServices(
+            this IServiceCollection services)
+        {
+            services
+                .AddHostedService<ReactionProcessingBackgroundService>();
+
+            return services;
+        }
+
     }
 }

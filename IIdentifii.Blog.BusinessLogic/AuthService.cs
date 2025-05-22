@@ -1,13 +1,4 @@
-﻿using IIdentifii.Blog.Repository;
-using IIdentifii.Blog.Shared;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
-
-namespace IIdentifii.Blog.BusinessLogic
+﻿namespace IIdentifii.Blog.BusinessLogic
 {
     internal class AuthService : IAuthService
     {

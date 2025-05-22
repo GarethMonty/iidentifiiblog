@@ -1,5 +1,3 @@
-using IIdentifii.Blog.Repository;
-
 namespace IIdentifii.Blog
 {
     public class Program
@@ -13,19 +11,21 @@ namespace IIdentifii.Blog
                 .AddContextServices()
                 .AddBusinessLogicServices()
                 .AddCacheServices()
-                .AddAuthRepositoryServices(builder.Configuration)
-                .AddRepositoryServices(builder.Configuration);
+                .AddRepositoryServices(builder.Configuration)
+                .AddBackgroundProcessingServices()
+                .AddDocumentationServices()
+                .AddSettingServices(builder.Configuration)
+                .AddFeatureFlagServices();
 
             builder.Services.AddControllers();
 
-            builder.Services.AddOpenApi();
-
             builder.Services.AddRazorPages();
 
-            var app = builder.Build();
+            WebApplication app = builder.Build();
 
             if (app.Environment.IsDevelopment())
             {
+                app.UseSwagger();
                 app.MapOpenApi();
             }
 
@@ -34,6 +34,8 @@ namespace IIdentifii.Blog
 
             app.UseRouting();
 
+            app.UseMiddleware<GlobalExceptionMiddleware>();
+
             app.UseAuthentication();
             app.UseAuthorization();
 
@@ -41,9 +43,22 @@ namespace IIdentifii.Blog
 
             app.MapControllers();
 
-            app.Run();
+            app.MapSwagger();
 
-            await SeedHelpers.SeedRolesAndUsersAsync(app.Services);
+            app.UseReDoc(c =>
+            {
+                c.RoutePrefix = "docs";
+                c.SpecUrl("/swagger/v1/swagger.json");
+                c.DocumentTitle = "IIdentifii Blog API Docs";
+            });
+
+            await app.RunMigrationsAsync();
+
+            await app.SeedRolesAndUsersAsync();
+
+            await app.SeedBlogsAsync();
+
+            await app.RunAsync();
         }
     }
 }

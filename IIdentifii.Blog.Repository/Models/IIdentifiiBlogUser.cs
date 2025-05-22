@@ -8,7 +8,7 @@
 
         public ICollection<BlogPostModel>? Posts { get; set; }
 
-        public ICollection<LikeModel>? Likes { get; set; }
+        public ICollection<ReactionModel>? Reactions { get; set; }
     }
 }
 
