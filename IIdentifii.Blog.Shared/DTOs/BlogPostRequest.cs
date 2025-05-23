@@ -3,7 +3,7 @@
     /// <summary>
     /// A request object for filtering and retrieving blog posts.
     /// </summary>
-    public record BlogPostRequest
+    public record BlogPostRequest : IAuthorFilterable, IDateFilterable, ITextFilterable, IReactionFilterable, ITagFilterable, ISortable, IPagingFilterable
     {
         /// <summary>
         /// Filter by a specific author's ID.
@@ -21,13 +21,19 @@
         /// Optional filtering criteria (e.g. keyword, tags).
         /// </summary>
         [JsonPropertyName("filter")]
-        public FilterRequest? Filter { get; set; }
+        public FilterTextRequest? Filter { get; set; }
 
         /// <summary>
         /// Optional filter for reactions (e.g. likes, dislikes).
         /// </summary>
         [JsonPropertyName("reactionFilter")]
         public ReactionFilterRequest? ReactionFilter { get; set; }
+
+        /// <summary>
+        /// Optional filter for tags
+        /// </summary>
+        [JsonPropertyName("tagFilter")]
+        public TagFilterRequest? TagFilter { get; set; }
 
         [JsonPropertyName("sort")]
         public SortRequest? Sort { get; set; }

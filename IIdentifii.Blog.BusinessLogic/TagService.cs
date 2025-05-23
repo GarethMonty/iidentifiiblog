@@ -4,8 +4,6 @@
     {
         #region Fields
 
-        private readonly IRequestContextService _requestContextService;
-
         private readonly ITagRepository _tagRepository;
 
         #endregion
@@ -13,11 +11,8 @@
         #region Constructor Methods
 
         public TagService(
-            IRequestContextService requestContextService,
             ITagRepository tagRepository)
         {
-            _requestContextService = requestContextService;
-
             _tagRepository = tagRepository;
         }
 
@@ -50,13 +45,9 @@
 
         public async Task<ApiResponse<Tag>> CreateTagAsync(
             CreateTagRequest createRequest,
+            Guid userId,
             CancellationToken token)
         {
-            if (!_requestContextService.TryGetUserId(out Guid userId))
-            {
-                return ApiResponse<Tag>.Failure($"User not found");
-            }
-
             TagModel model = new TagModel()
             {
                 Id = Guid.CreateVersion7(),
@@ -73,6 +64,7 @@
 
         public async Task<ApiResponse<Tag>> UpdateTagAsync(
             UpdateTagRequest updateRequest,
+            Guid userId,
             CancellationToken token)
         {
             TagModel? model = await _tagRepository.GetTagByIdAsync(updateRequest.Id, token);
@@ -80,6 +72,10 @@
             if (model is null)
             {
                 return ApiResponse<Tag>.NotFound($"Tag with id {updateRequest.Id} not found");
+            }
+            else if (model.ModeratorId != userId)
+            {
+                return ApiResponse<Tag>.Unauthorized($"Moderator {userId} is not authorized to update this tag");
             }
 
             model.Type = updateRequest.Type;
@@ -91,6 +87,7 @@
 
         public async Task<ApiResponse<bool>> DeleteTagAsync(
             Guid tagId,
+            Guid userId,
             CancellationToken token)
         {
             TagModel? model = await _tagRepository.GetTagByIdAsync(tagId, token);
@@ -98,6 +95,10 @@
             if (model is null)
             {
                 return ApiResponse<bool>.NotFound($"Tag with id {tagId} not found");
+            }
+            else if (model.ModeratorId != userId)
+            {
+                return ApiResponse<bool>.Unauthorized($"Moderator {userId} is not authorized to delete this tag");
             }
 
             bool deleted = await _tagRepository.DeleteTagAsync(tagId, token);

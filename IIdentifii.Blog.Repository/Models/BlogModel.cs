@@ -1,6 +1,6 @@
 ﻿namespace IIdentifii.Blog.Repository
 {
-    public record BlogPostModel : IDeletableEntity
+    public record BlogPostModel : ISoftDelete
     {
         #region Properties
 
@@ -12,11 +12,9 @@
 
         public DateTime PostedAt { get; set; }
 
-        public int ReactionCount { get; set; }
-
         public bool IsDeleted { get; set; }
 
-        public DateTime DeletedAt { get; set; }
+        public DateTimeOffset DeletedAt { get; set; }
 
         public Guid AuthorId { get; set; }
 

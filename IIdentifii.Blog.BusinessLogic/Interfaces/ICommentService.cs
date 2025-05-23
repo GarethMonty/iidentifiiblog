@@ -2,7 +2,7 @@
 {
     public interface ICommentService
     {
-        Task<ApiResponse<List<Comment>>> GetCommentsAsync(
+        Task<PagedApiResponse<Comment>> GetCommentsAsync(
             CommentRequest request,
             CancellationToken token);
 

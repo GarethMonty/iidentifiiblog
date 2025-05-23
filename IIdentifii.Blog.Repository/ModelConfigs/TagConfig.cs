@@ -15,7 +15,7 @@
                 .IsRequired()
                 .HasMaxLength(250);
 
-            builder.HasIndex(mf => new { mf.BlogPostId, mf.ModeratorId, mf.Type })
+            builder.HasIndex(mf => new { mf.BlogPostId, mf.ModeratorId, mf.Type, mf.IsDeleted })
                 .IsUnique();
 
             builder.HasOne(mf => mf.BlogPost)
@@ -26,6 +26,10 @@
             builder.HasOne(mf => mf.Moderator)
                 .WithMany()
                 .HasForeignKey(mf => mf.ModeratorId);
+
+            builder
+                .HasQueryFilter(x => x.IsDeleted == false);
+
         }
     }
 }

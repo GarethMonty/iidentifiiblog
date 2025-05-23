@@ -11,7 +11,6 @@
         /// <summary>
         /// The enum type of reaction (like, dislike, etc.).
         /// </summary>
-        [JsonConverter(typeof(JsonStringEnumConverter))]
         [JsonPropertyName("type")]
         public ReactionType Type { get; set; }
 

@@ -16,11 +16,5 @@
         /// </summary>
         [JsonPropertyName("displayName")]
         public string DisplayName { get; set; }
-
-        /// <summary>
-        /// A short bio or description of the user.
-        /// </summary>
-        [JsonPropertyName("bio")]
-        public string? Bio { get; set; }
     }
 }

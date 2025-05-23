@@ -8,6 +8,8 @@
 
             builder.HasKey(c => c.Id);
 
+            builder.HasIndex(ra => new { ra.BlogPostId, ra.UserId, ra.IsDeleted });
+
             builder.Property(c => c.Content)
                 .IsRequired()
                 .HasMaxLength(1000);
@@ -23,6 +25,10 @@
             builder.HasOne(c => c.User)
                 .WithMany()
                 .HasForeignKey(c => c.UserId);
+
+            builder
+                .HasQueryFilter(x => x.IsDeleted == false);
+
         }
     }
 }

@@ -1,6 +1,4 @@
-﻿using Z.EntityFramework.Plus;
-
-namespace IIdentifii.Blog.Repository
+﻿namespace IIdentifii.Blog.Repository
 {
     internal class BlogPostRepository : IBlogPostRepository
     {
@@ -26,113 +24,36 @@ namespace IIdentifii.Blog.Repository
 
         #region Methods
 
-        public async Task<List<BlogPostModel>> GetBlogPostsAsync(
+        public async Task<PagedResultModel<BlogPostModel>> GetBlogPostsAsync(
             BlogPostRequest blogPostRequest,
             CancellationToken token)
         {
             ArgumentNullException.ThrowIfNull(blogPostRequest, nameof(blogPostRequest));
 
-            IQueryable<BlogPostModel> query = _set
-                .AsNoTracking()
-                .Include(x => x.Author)
-                .Include(x => x.Comments)
-                .Include(x => x.Tags)
-                .Include(x => x.ReactionAggregates)
-                .AsQueryable();
+            IQueryable<BlogPostModel> baseQuery = _set
+                .BeginFilter(blogPostRequest)
+                .ApplyAuthorFilter()
+                .ApplyDateFilter()
+                .ApplyTextQueryFilter()
+                .ApplyReactionFilter()
+                .ApplyTagFilter()
+                .BuildFilter();
 
-            if (blogPostRequest.AuthorId is not null)
-            {
-                query = query
-                    .Where(x => x.AuthorId == blogPostRequest.AuthorId.Value);
-            }
+            int totalCount = await baseQuery.CountAsync(token);
 
-            if (blogPostRequest.DateFilter is not null)
-            {
-                query = query
-                    .Where(x => x.PostedAt >= blogPostRequest.DateFilter.From && x.PostedAt <= blogPostRequest.DateFilter.To);
-            }
+            IQueryable<BlogPostModel> pagedQuery = (baseQuery, blogPostRequest)
+                .ApplySort()
+                .ApplyPaging()
+                .BuildFilter();
 
-            if (blogPostRequest.Filter is not null && !string.IsNullOrEmpty(blogPostRequest.Filter.Query))
-            {
-                query = query
-                    .Where(x => x.Title.Contains(blogPostRequest.Filter.Query) || x.Content.Contains(blogPostRequest.Filter.Query));
-            }
+            List<BlogPostModel> items = await pagedQuery.ToListAsync(token);
 
-            if (blogPostRequest.ReactionFilter is not null)
-            {
-                if (blogPostRequest.ReactionFilter.IncludeEntities)
-                {
-                    query = query
-                        .Include(x => x.Reactions);
-                }
+            PagedResultModel<BlogPostModel> pagedResultModel = PagedResultModel<BlogPostModel>.CreateFromRequest(blogPostRequest.Paging);
 
-                if(blogPostRequest.ReactionFilter.ExcludedTypes.Count > 0)
-                {
-                    query = query
-                        .IncludeFilter(x => x.Reactions.Where(r => !blogPostRequest.ReactionFilter.ExcludedTypes.Contains(r.Type)));
-                }
-            }
+            pagedResultModel.Items = items;
+            pagedResultModel.TotalCount = totalCount;
 
-            if (blogPostRequest.Sort is not null)
-            {
-                if (blogPostRequest.Sort.SortOrder == SortOrderType.Descending)
-                {
-                    switch (blogPostRequest.Sort.SortBy)
-                    {
-                        default:
-                        case SortByType.PostedAt:
-                            query = query
-                                .OrderByDescending(x => x.PostedAt);
-                            break;
-                        case SortByType.Title:
-                            query = query
-                                .OrderByDescending(x => x.Title);
-                            break;
-                        case SortByType.ReactionCount:
-                            break;
-                        case SortByType.Tags:
-                            break;
-                    }
-                }
-                else
-                {
-                    switch (blogPostRequest.Sort.SortBy)
-                    {
-                        default:
-                        case SortByType.PostedAt:
-                            query = query
-                                .OrderBy(x => x.PostedAt);
-                            break;
-                        case SortByType.Title:
-                            query = query
-                                .OrderBy(x => x.Title);
-                            break;
-                        case SortByType.ReactionCount:
-                            break;
-                        case SortByType.Tags:
-                            break;
-                    }
-                }
-            }
-
-            if (blogPostRequest.Paging is not null)
-            {
-                query = query
-                    .Skip((blogPostRequest.Paging.Page - 1) * blogPostRequest.Paging.PageSize)
-                    .Take(blogPostRequest.Paging.PageSize);
-            }
-
-            return await query.ToListAsync(token);
-        }
-
-        public Task<List<BlogPostModel>> GetBlogPostsOfAuthorAsync(
-            BlogPostRequest blogPostRequest,
-            CancellationToken token)
-        {
-            ArgumentNullException.ThrowIfNull(blogPostRequest, nameof(blogPostRequest));
-            ArgumentNullException.ThrowIfNull(blogPostRequest.AuthorId, nameof(blogPostRequest.AuthorId));
-
-            return GetBlogPostsAsync(blogPostRequest, token);
+            return pagedResultModel;
         }
 
         public async Task<BlogPostModel?> GetBlogPostAsync(

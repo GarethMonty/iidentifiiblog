@@ -3,7 +3,7 @@
     /// <summary>
     /// Represents a simple text-based filter (e.g., search query).
     /// </summary>
-    public record FilterRequest
+    public record FilterTextRequest
     {
         /// <summary>
         /// A keyword or search query used to filter results.

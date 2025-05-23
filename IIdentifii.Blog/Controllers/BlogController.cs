@@ -24,10 +24,10 @@ namespace IIdentifii.Blog.Controllers
         #endregion
 
         /// <summary>
-        /// Retrieves a list of blog posts using optional filtering, sorting, and paging.
+        /// Retrieves a paged list of blog posts using optional filtering, sorting, and paging.
         /// </summary>
         /// <remarks>
-        /// This endpoint allows users to query blog posts by author, date range, keywords, or paging options.
+        /// This endpoint allows users to query and page blog posts by author, date range, keywords.
         /// </remarks>
         /// <param name="request">The filtering, sorting, and paging request object.</param>
         /// <param name="token">The cancellation token.</param>
@@ -35,15 +35,17 @@ namespace IIdentifii.Blog.Controllers
         [HttpGet]
         [Consumes("application/json")]
         [Produces("application/json")]
-        [ProducesResponseType(typeof(ApiResponse<List<BlogPost>>), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(ApiResponse<List<BlogPost>>), StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(typeof(ApiResponse<List<BlogPost>>), StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(typeof(PagedApiResponse<BlogPost>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(PagedApiResponse<BlogPost>), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(PagedApiResponse<BlogPost>), StatusCodes.Status500InternalServerError)]
+        [SwaggerRequestExample(typeof(BlogPostRequest), typeof(BlogPostRequestExample))]
         public async Task<IActionResult> GetBlogPostsAsync(
             [FromBody] BlogPostRequest request,
             CancellationToken token)
         {
-            ApiResponse<List<BlogPost>> response = await _blogPostService.GetBlogPostsAsync(request, token);
-            return response.ToResult();
+            PagedApiResponse<BlogPost> pagedResponse = await _blogPostService.GetBlogPostsAsync(request, token);
+
+            return pagedResponse.ToResult();
         }
 
         /// <summary>
@@ -62,6 +64,7 @@ namespace IIdentifii.Blog.Controllers
             CancellationToken token)
         {
             ApiResponse<BlogPost> response = await _blogPostService.GetBlogPostAsync(blogPostId, token);
+
             return response.ToResult();
         }
 
@@ -78,11 +81,13 @@ namespace IIdentifii.Blog.Controllers
         [ProducesResponseType(typeof(ApiResponse<BlogPost>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiResponse<BlogPost>), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ApiResponse<BlogPost>), StatusCodes.Status500InternalServerError)]
+        [SwaggerRequestExample(typeof(CreateBlogPostRequest), typeof(CreateBlogPostRequestExample))]
         public async Task<IActionResult> CreateBlogPostAsync(
             [FromBody] CreateBlogPostRequest request,
             CancellationToken token)
         {
             ApiResponse<BlogPost> response = await _blogPostService.CreateBlogPostAsync(request, token);
+
             return response.ToResult();
         }
 
@@ -101,6 +106,7 @@ namespace IIdentifii.Blog.Controllers
         [ProducesResponseType(typeof(ApiResponse<BlogPost>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiResponse<BlogPost>), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ApiResponse<BlogPost>), StatusCodes.Status500InternalServerError)]
+        [SwaggerRequestExample(typeof(UpdateBlogPostRequest), typeof(UpdateBlogPostRequestExample))]
         public async Task<IActionResult> UpdateBlogPostAsync(
             [FromRoute] Guid blogPostId,
             [FromBody] UpdateBlogPostRequest request,
@@ -108,6 +114,7 @@ namespace IIdentifii.Blog.Controllers
         {
             request.Id = blogPostId;
             ApiResponse<BlogPost> response = await _blogPostService.UpdateBlogPostAsync(request, token);
+
             return response.ToResult();
         }
 
@@ -129,6 +136,7 @@ namespace IIdentifii.Blog.Controllers
             CancellationToken token)
         {
             ApiResponse<bool> response = await _blogPostService.DeleteBlogPostAsync(blogPostId, token);
+
             return response.ToResult();
         }
     }

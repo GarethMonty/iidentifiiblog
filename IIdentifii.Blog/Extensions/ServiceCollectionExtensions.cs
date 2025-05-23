@@ -1,4 +1,4 @@
-﻿using IIdentifii.Blog.Repository;
+﻿using Mapster;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -130,7 +130,14 @@ namespace Microsoft.Extensions.DependencyInjection
 
                 string sharedXmlPath = Path.Combine(AppContext.BaseDirectory, "IIdentifii.Blog.Shared.xml");
                 c.IncludeXmlComments(sharedXmlPath);
+
+                c.EnableAnnotations();
+
+                c.ExampleFilters();
             });
+
+            services
+                .AddSwaggerExamplesFromAssemblyOf<LoginRequestExample>();
 
             services.AddOpenApi();
 
@@ -154,6 +161,17 @@ namespace Microsoft.Extensions.DependencyInjection
             services
                 .AddHostedService<ReactionProcessingBackgroundService>();
 
+            return services;
+        }
+
+        public static IServiceCollection AddMappingServices(
+            this IServiceCollection services)
+        {
+
+            TypeAdapterConfig<BlogPostModel, BlogPost>.NewConfig()
+                .Map(dest => dest.Reactions,
+                     src => src.ReactionAggregates
+                                .ToDictionary(ra => ra.Type, ra => ra.Count));
             return services;
         }
 

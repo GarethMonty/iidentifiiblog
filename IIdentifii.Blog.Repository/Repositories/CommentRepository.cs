@@ -24,47 +24,34 @@
 
         #region Methods
 
-        public async Task<List<CommentModel>> GetCommentsAsync(
+        public async Task<PagedResultModel<CommentModel>> GetCommentsAsync(
             CommentRequest request,
             CancellationToken token)
         {
             ArgumentNullException.ThrowIfNull(request, nameof(request));
 
-            IQueryable<CommentModel> query = _set
-                .AsNoTracking()
-                .AsQueryable();
+            IQueryable<CommentModel> baseQuery = _set
+                .BeginFilter(request)
+                .ApplyBlogPostFilter()
+                .ApplyUserFilter()
+                .ApplyDateFilter()
+                .ApplyTextQueryFilter()
+                .BuildFilter();
 
-            if (request.BlogPostId is not null)
-            {
-                query = query
-                    .Where(x => x.BlogPostId == request.BlogPostId.Value);
-            }
-            if (request.UserId is not null)
-            {
-                query = query
-                    .Where(x => x.UserId == request.UserId.Value);
-            }
+            int totalCount = await baseQuery.CountAsync(token);
 
-            if (request.DateFilter is not null)
-            {
-                query = query
-                    .Where(x => x.CreatedAt >= request.DateFilter.From && x.CreatedAt <= request.DateFilter.To);
-            }
+            IQueryable<CommentModel> pagedQuery = (baseQuery, request)
+                .ApplyPaging()
+                .BuildFilter();
 
-            if (request.Filter is not null && !string.IsNullOrEmpty(request.Filter.Query))
-            {
-                query = query
-                    .Where(x => x.Content.Contains(request.Filter.Query));
-            }
+            List<CommentModel> items = await pagedQuery.ToListAsync(token);
 
-            if (request.Paging is not null)
-            {
-                query = query
-                    .Skip((request.Paging.Page - 1) * request.Paging.PageSize)
-                    .Take(request.Paging.PageSize);
-            }
+            PagedResultModel<CommentModel> pagedResultModel = PagedResultModel<CommentModel>.CreateFromRequest(request.Paging);
 
-            return await query.ToListAsync(token);
+            pagedResultModel.Items = items;
+            pagedResultModel.TotalCount = totalCount;
+
+            return pagedResultModel;
         }
 
         public async Task<CommentModel?> GetCommentByIdAsync(

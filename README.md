@@ -1,4 +1,11 @@
 # iidentifiiblog
 
 Sql Migrations command:
-dotnet ef migrations add InitialCreate --project ../IIdentifii.Blog.Repository --startup-project ../IIdentifii.Blog --context AuthDbContext
+
+//AuthDbContext
+dotnet ef migrations add AuthModelUpdate --context AuthDbContext --project IIdentifii.Blog.Repository --startup-project IIdentifii.Blog
+dotnet ef database update --context AuthDbContext --project IIdentifii.Blog.Repository --startup-project IIdentifii.Blog
+
+//BlogDbContext
+dotnet ef migrations add BlogModelsUpdate --context BlogDbContext --project IIdentifii.Blog.Repository --startup-project IIdentifii.Blog
+dotnet ef database update --context BlogDbContext --project IIdentifii.Blog.Repository --startup-project IIdentifii.Blog

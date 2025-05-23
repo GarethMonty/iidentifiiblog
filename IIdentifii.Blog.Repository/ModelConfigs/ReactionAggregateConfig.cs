@@ -7,15 +7,18 @@
         {
             builder.ToTable("ReactionAggregates");
 
-            builder.HasKey(l => l.Id);
+            builder.HasKey(ra => ra.Id);
 
-            builder.HasIndex(l => new { l.BlogPostId, l.Type })
+            builder.HasIndex(ra => new { ra.BlogPostId, ra.Type })
                 .IsUnique();
 
-            builder.HasOne(l => l.BlogPost)
+            builder.HasOne(ra => ra.BlogPost)
                 .WithMany(p => p.ReactionAggregates)
-                .HasForeignKey(l => l.BlogPostId)
+                .HasForeignKey(ra => ra.BlogPostId)
                 .OnDelete(DeleteBehavior.NoAction);
+
+            builder
+                .HasQueryFilter(ra => ra.IsDeleted == false);
         }
     }
 }

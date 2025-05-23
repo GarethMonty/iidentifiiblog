@@ -2,7 +2,7 @@
 {
     public interface ICommentRepository
     {
-        Task<List<CommentModel>> GetCommentsAsync(
+        Task<PagedResultModel<CommentModel>> GetCommentsAsync(
             CommentRequest request,
             CancellationToken token);
 

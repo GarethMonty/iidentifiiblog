@@ -38,10 +38,10 @@
         public BlogUser Author { get; set; }
 
         /// <summary>
-        /// The list of users who have liked the post.
+        /// The aggregated counts of reactions to the blog post.
         /// </summary>
-        [JsonPropertyName("likes")]
-        public List<Reaction> Reactions { get; set; } = new();
+        [JsonPropertyName("reactions")]
+        public Dictionary<ReactionType, int> Reactions { get; set; } = new();
 
         /// <summary>
         /// Comments made on the blog post.

@@ -4,7 +4,8 @@
     {
         PostedAt = 0,
         Title = 1,
-        ReactionCount = 2,
-        Tags = 3,
+        Reactions = 2,
+        Likes = 3,
+        Tags = 4,
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace IIdentifii.Blog.Repository
 {
-    public record CommentModel : IDeletableEntity
+    public record CommentModel : ISoftDelete
     {
         #region Properties
 
@@ -12,7 +12,7 @@
 
         public bool IsDeleted { get; set; }
 
-        public DateTime DeletedAt { get; set; }
+        public DateTimeOffset DeletedAt { get; set; }
 
         public Guid BlogPostId { get; set; }
 

@@ -1,6 +1,6 @@
 ﻿namespace IIdentifii.Blog.Repository
 {
-    public class TagModel : IDeletableEntity
+    public class TagModel : ISoftDelete
     {
         #region Properties
 
@@ -20,7 +20,7 @@
 
         public bool IsDeleted { get; set; }
 
-        public DateTime DeletedAt { get; set; }
+        public DateTimeOffset DeletedAt { get; set; }
 
         #endregion
 

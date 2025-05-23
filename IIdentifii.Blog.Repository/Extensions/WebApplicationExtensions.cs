@@ -1,4 +1,6 @@
-﻿namespace Microsoft.AspNetCore.Builder
+﻿using Microsoft.Extensions.Hosting;
+
+namespace Microsoft.AspNetCore.Builder
 {
     public static class WebApplicationExtensions
     {
@@ -6,6 +8,11 @@
             this WebApplication app, 
             CancellationToken token = default)
         {
+            if (app.Environment.IsEnvironment("Testing"))
+            {
+                return;
+            }
+
             await ApplyMigrationsAsync<AppDbContext>(app, token);
         }
 
@@ -15,9 +22,15 @@
         {
             using IServiceScope scope = app.Services.CreateScope();
 
-            UserManager<IIdentifiiUser> userManager = scope.ServiceProvider.GetRequiredService<UserManager<IIdentifiiUser>>();
+            await SeedRolesAndUsersAsync(scope.ServiceProvider);
+        }
 
-            await AddRoles(scope);
+        public static async Task SeedRolesAndUsersAsync(
+            IServiceProvider services)
+        {
+            UserManager<IIdentifiiUser> userManager = services.GetRequiredService<UserManager<IIdentifiiUser>>();
+
+            await AddRoles(services);
 
             await AddModerator(userManager, SeedDataConstants.ModeratorId, moderatorEmail: SeedDataConstants.ModeratorEmail, SeedDataConstants.ModeratorPassword);
 
@@ -145,9 +158,9 @@
         }
 
         private static async Task AddRoles(
-            IServiceScope scope)
+            IServiceProvider services)
         {
-            RoleManager<IdentityRole<Guid>> roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole<Guid>>>();
+            RoleManager<IdentityRole<Guid>> roleManager = services.GetRequiredService<RoleManager<IdentityRole<Guid>>>();
 
             foreach (string role in RoleConstants.AllRoles)
             {

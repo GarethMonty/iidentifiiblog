@@ -25,22 +25,17 @@
 
         #region Methods
 
-        public async Task<ApiResponse<List<BlogPost>>> GetBlogPostsAsync(
+        public async Task<PagedApiResponse<BlogPost>> GetBlogPostsAsync(
             BlogPostRequest request,
             CancellationToken token)
         {
-            List<BlogPostModel> models = await _blogPostRepository.GetBlogPostsAsync(request, token);
+            PagedResultModel<BlogPostModel> pagedModels = await _blogPostRepository.GetBlogPostsAsync(request, token);
 
-            return ApiResponse<List<BlogPost>>.Success(models.Adapt<List<BlogPost>>());
-        }
-
-        public async Task<ApiResponse<List<BlogPost>>> GetBlogPostsForAuthorAsync(
-            BlogPostRequest request,
-            CancellationToken token)
-        {
-            List<BlogPostModel> models = await _blogPostRepository.GetBlogPostsOfAuthorAsync(request, token);
-
-            return ApiResponse<List<BlogPost>>.Success(models.Adapt<List<BlogPost>>());
+            return PagedApiResponse<BlogPost>.Success(
+                data: pagedModels.Items.Adapt<List<BlogPost>>(), 
+                page: pagedModels.Page, 
+                size: pagedModels.PageSize, 
+                totalCount: pagedModels.TotalCount);
         }
 
         public async Task<ApiResponse<BlogPost>> GetBlogPostAsync(

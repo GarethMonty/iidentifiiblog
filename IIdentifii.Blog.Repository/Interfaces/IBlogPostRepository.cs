@@ -2,12 +2,8 @@
 {
     public interface IBlogPostRepository
     {
-        Task<List<BlogPostModel>> GetBlogPostsAsync(
+        Task<PagedResultModel<BlogPostModel>> GetBlogPostsAsync(
             BlogPostRequest blogPostRequest,
-            CancellationToken token);
-
-        Task<List<BlogPostModel>> GetBlogPostsOfAuthorAsync(
-            BlogPostRequest blogPostRequestd,
             CancellationToken token);
 
         Task<BlogPostModel?> GetBlogPostAsync(

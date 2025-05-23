@@ -57,10 +57,7 @@
 
             string token = new JwtSecurityTokenHandler().WriteToken(jwtToken);
 
-            return ApiResponse<LoginResponse?>.Success(new LoginResponse()
-            {
-                Token = token
-            });
+            return ApiResponse<LoginResponse?>.Success(LoginResponse.Create(token, jwtToken.ValidTo));
         }
 
         #endregion

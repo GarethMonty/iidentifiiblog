@@ -1,22 +1,23 @@
 ﻿namespace IIdentifii.Blog.Repository
 {
-    public record ReactionAggregateModel : IDeletableEntity
+    public record ReactionAggregateModel : ISoftDelete
     {
         #region Properties
 
         public Guid Id { get; set; }
 
-        public Guid BlogPostId { get; set; }
-
         public ReactionType Type { get; set; }
 
         public int Count { get; set; }
 
-        public BlogPostModel BlogPost { get; set; }
-
         public bool IsDeleted { get; set; }
 
-        public DateTime DeletedAt { get; set; }
+        public DateTimeOffset DeletedAt { get; set; }
+
+        public Guid BlogPostId { get; set; }
+
+        public BlogPostModel BlogPost { get; set; }
+
 
         #endregion
 

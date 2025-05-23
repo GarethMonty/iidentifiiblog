@@ -15,7 +15,7 @@
                 .AddScoped<ITagService, TagService>();
 
             services
-                .AddSingleton<IReactionService, ReactionService>();
+                .AddSingleton<IReactionHandler, ReactionHandler>();
 
             return services;
         }

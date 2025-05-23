@@ -2,11 +2,7 @@
 {
     public interface IBlogPostService
     {
-        Task<ApiResponse<List<BlogPost>>> GetBlogPostsAsync(
-            BlogPostRequest request,
-            CancellationToken token);
-
-        Task<ApiResponse<List<BlogPost>>> GetBlogPostsForAuthorAsync(
+        Task<PagedApiResponse<BlogPost>> GetBlogPostsAsync(
             BlogPostRequest request,
             CancellationToken token);
 

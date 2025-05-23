@@ -23,7 +23,7 @@
         /// <summary>
         /// The reason the post was tagged.
         /// </summary>
-        [JsonPropertyName("reason")]
-        public TagType Reason { get; set; }
+        [JsonPropertyName("type")]
+        public TagType Type { get; set; }
     }
 }

@@ -7,25 +7,29 @@
         {
             builder.ToTable("Reactions");
 
-            builder.HasKey(l => l.Id);
+            builder.HasKey(r => r.Id);
 
-            builder.HasIndex(l => new { l.BlogPostId, l.Type })
+            builder.HasIndex(r => new { r.BlogPostId, r.Type })
                 .IsUnique();
 
-            builder.HasIndex(l => new { l.BlogPostId, l.UserId })
+            builder.HasIndex(r => new { r.BlogPostId, r.UserId, r.IsDeleted })
                 .IsUnique();
 
-            builder.Property(l => l.ReactedAt)
+            builder.Property(r => r.ReactedAt)
                 .HasDefaultValueSql("GETUTCDATE()");
 
-            builder.HasOne(l => l.BlogPost)
+            builder.HasOne(r => r.BlogPost)
                 .WithMany(p => p.Reactions)
-                .HasForeignKey(l => l.BlogPostId)
+                .HasForeignKey(r => r.BlogPostId)
                 .OnDelete(DeleteBehavior.NoAction);
 
-            builder.HasOne(l => l.User)
+            builder.HasOne(r => r.User)
                 .WithMany()
-                .HasForeignKey(l => l.UserId);
+                .HasForeignKey(r => r.UserId);
+
+            builder
+                .HasQueryFilter(r => r.IsDeleted == false);
+
         }
     }
 }

@@ -20,13 +20,17 @@
 
         #region Methods
 
-        public async Task<ApiResponse<List<Comment>>> GetCommentsAsync(
+        public async Task<PagedApiResponse<Comment>> GetCommentsAsync(
             CommentRequest request,
             CancellationToken token)
         {
-            List<CommentModel> models = await _commentRepository.GetCommentsAsync(request, token);
+            PagedResultModel<CommentModel> pagedModels = await _commentRepository.GetCommentsAsync(request, token);
 
-            return ApiResponse<List<Comment>>.Success(models.Adapt<List<Comment>>());
+            return PagedApiResponse<Comment>.Success(
+                data: pagedModels.Items.Adapt<List<Comment>>(),
+                page: pagedModels.Page,
+                size: pagedModels.PageSize,
+                totalCount: pagedModels.TotalCount);
         }
 
         public async Task<ApiResponse<Comment>> GetCommentAsync(
@@ -73,6 +77,10 @@
             {
                 return ApiResponse<Comment>.NotFound($"Comment with id {updateRequest.Id} not found");
             }
+            else if (model.UserId != userId)
+            {
+                return ApiResponse<Comment>.Unauthorized($"User {userId} is not authorized to update this comment");
+            }
 
             model.Content = updateRequest.Content;
 
@@ -91,6 +99,10 @@
             if (model is null)
             {
                 return ApiResponse<bool>.NotFound($"Comment with id {commentId} not found");
+            }
+            else if (model.UserId != userId)
+            {
+                return ApiResponse<bool>.Unauthorized($"User {userId} is not authorized to delete this comment");
             }
 
             bool deleted = await _commentRepository.DeleteCommentAsync(commentId, token);

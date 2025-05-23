@@ -3,7 +3,7 @@
     /// <summary>
     /// A request object for filtering and retrieving comments.
     /// </summary>
-    public record CommentRequest
+    public record CommentRequest : IFilterable, IBlobPostFilterable, IUserFilterable, IDateFilterable, ITextFilterable, IPagingFilterable
     {
         /// <summary>
         /// Optional filter for comments on a specific blog post.
@@ -27,7 +27,7 @@
         /// Optional content/text filters.
         /// </summary>
         [JsonPropertyName("filter")]
-        public FilterRequest? Filter { get; set; }
+        public FilterTextRequest? Filter { get; set; }
 
         /// <summary>
         /// Paging parameters for the comment list.

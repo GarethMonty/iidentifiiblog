@@ -1,9 +1,12 @@
-﻿namespace Microsoft.Extensions.DependencyInjection
+﻿using Microsoft.Extensions.Hosting;
+
+namespace Microsoft.Extensions.DependencyInjection
 {
     public static class ServiceCollectionExtensions
     {
         public static IServiceCollection AddRepositoryServices(
             this IServiceCollection services,
+            IHostEnvironment environment,
             IConfiguration configuration)
         {
             string? connectionString = configuration.GetConnectionString("Sql");
@@ -13,8 +16,12 @@
                 throw new ArgumentNullException("Connection string 'Sql' is not configured.");
             }
 
-            services.AddDbContext<AppDbContext>(options =>
-                options.UseSqlServer(connectionString));
+            if (!environment.IsEnvironment("Testing"))
+            {
+                services.AddDbContext<AppDbContext>(options =>
+                    options.UseSqlServer(connectionString)
+                    .AddInterceptors(new SoftDeleteInterceptor()));
+            }
 
             services
                 .AddScoped<IBlogPostRepository, BlogPostRepository>()

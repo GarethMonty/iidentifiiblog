@@ -25,6 +25,9 @@
                 .OnDelete(DeleteBehavior.Restrict);
 
             builder.HasIndex(p => p.PostedAt);
+
+            builder
+                .HasQueryFilter(p => p.IsDeleted == false);
         }
     }
 }

@@ -30,18 +30,18 @@ namespace IIdentifii.Blog.Controllers
         #endregion
 
         /// <summary>
-        /// Retrieves a list of comments for a specific blog post.
+        /// Retrieves a paged list of comments for a specific blog post.
         /// </summary>
         /// <param name="blogPostId">The ID of the blog post whose comments are being requested.</param>
         /// <param name="request">Filtering and paging parameters for the comment list.</param>
         /// <param name="token">The cancellation token.</param>
-        /// <returns>A list of matching comments.</returns>
+        /// <returns>A paged list of matching comments.</returns>
         [HttpGet]
-
         [Consumes("application/json")]
         [Produces("application/json")]
-        [ProducesResponseType(typeof(ApiResponse<List<Comment>>), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(ApiResponse<List<Comment>>), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(PagedApiResponse<Comment>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(PagedApiResponse<Comment>), StatusCodes.Status400BadRequest)]
+        [SwaggerRequestExample(typeof(CommentRequest), typeof(CommentRequestExample))]
         public async Task<IActionResult> GetCommentsAsync(
             [FromRoute] Guid blogPostId,
             [FromBody] CommentRequest request,
@@ -49,7 +49,7 @@ namespace IIdentifii.Blog.Controllers
         {
             request.BlogPostId = blogPostId;
 
-            ApiResponse<List<Comment>> response = await _commentService.GetCommentsAsync(request, token);
+            PagedApiResponse<Comment> response = await _commentService.GetCommentsAsync(request, token);
 
             return response.ToResult();
         }
@@ -87,6 +87,7 @@ namespace IIdentifii.Blog.Controllers
         [ProducesResponseType(typeof(ApiResponse<Comment>), StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(ApiResponse<Comment>), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ApiResponse<Comment>), StatusCodes.Status401Unauthorized)]
+        [SwaggerRequestExample(typeof(CreateCommentRequest), typeof(CreateCommentRequestExample))]
         public async Task<IActionResult> CreateCommentAsync(
             [FromRoute] Guid blogPostId,
             [FromBody] CreateCommentRequest request,
@@ -117,6 +118,7 @@ namespace IIdentifii.Blog.Controllers
         [ProducesResponseType(typeof(ApiResponse<Comment>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiResponse<Comment>), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ApiResponse<Comment>), StatusCodes.Status401Unauthorized)]
+        [SwaggerRequestExample(typeof(UpdateCommentRequest), typeof(UpdateCommentRequestExample))]
         public async Task<IActionResult> UpdateCommentAsync(
             [FromBody] UpdateCommentRequest request,
             CancellationToken token)

@@ -102,7 +102,7 @@ namespace IIdentifii.Blog.Controllers
         /// </summary>
         /// <param name="blogPostId">The ID of the blog post to reaction.</param>
         /// <param name="reactionType">The enum type of a reaction (Like, Dislike, etc)</param>
-        /// <param name="previousReactionType">The enum type of the previous selected reaction (Like, Dislike, etc)</param>
+        /// <param name="previous">The enum type of the previous selected reaction (Like, Dislike, etc)</param>
         /// <param name="token">The cancellation token.</param>
         /// <returns>The created reaction object.</returns>
         [Authorize(Roles = RoleConstants.User)]
@@ -114,7 +114,7 @@ namespace IIdentifii.Blog.Controllers
         public async Task<IActionResult> ChangeReactionAsync(
             [FromRoute] Guid blogPostId,
             [FromRoute] ReactionType reactionType,
-            [FromQuery] ReactionType previousReactionType,
+            [FromQuery] ReactionType previous,
             CancellationToken token)
         {
             if (!_requestContextService.TryGetUserId(out Guid userId))

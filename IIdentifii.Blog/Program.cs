@@ -1,3 +1,5 @@
+using System.Text.Json.Serialization;
+
 namespace IIdentifii.Blog
 {
     public class Program
@@ -11,13 +13,17 @@ namespace IIdentifii.Blog
                 .AddContextServices()
                 .AddBusinessLogicServices()
                 .AddCacheServices()
-                .AddRepositoryServices(builder.Configuration)
+                .AddRepositoryServices(builder.Environment, builder.Configuration)
                 .AddBackgroundProcessingServices()
                 .AddDocumentationServices()
                 .AddSettingServices(builder.Configuration)
                 .AddFeatureFlagServices();
 
-            builder.Services.AddControllers();
+            builder.Services.AddControllers()
+                .AddJsonOptions(options =>
+                {
+                    options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+                }); ;
 
             builder.Services.AddRazorPages();
 

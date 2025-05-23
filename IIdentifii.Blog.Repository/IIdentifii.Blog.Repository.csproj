@@ -34,6 +34,7 @@
     <Using Include="Microsoft.EntityFrameworkCore.Metadata.Builders" />
     <Using Include="Microsoft.Extensions.Configuration" />
     <Using Include="Microsoft.Extensions.DependencyInjection" />
+    <Using Include="Z.EntityFramework.Plus" />
   </ItemGroup>
 
 </Project>

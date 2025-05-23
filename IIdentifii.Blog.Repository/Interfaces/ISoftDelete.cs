@@ -1,9 +1,9 @@
 ﻿namespace IIdentifii.Blog.Repository
 {
-    public interface IDeletableEntity
+    public interface ISoftDelete
     {
         bool IsDeleted { get; set; }
 
-        DateTime DeletedAt { get; set; }
+        DateTimeOffset DeletedAt { get; set; }
     }
 }
