@@ -35,6 +35,9 @@
         [JsonPropertyName("tagFilter")]
         public TagFilterRequest? TagFilter { get; set; }
 
+        /// <summary>
+        /// Optional sorting criteria (e.g. by postedAt, likes).
+        /// </summary>
         [JsonPropertyName("sort")]
         public SortRequest? Sort { get; set; }
 

@@ -3,6 +3,8 @@
     public class CustomWebApplicationFactory<TProgram> : WebApplicationFactory<TProgram> 
         where TProgram : class
     {
+        public string DatabaseName { get; } = Guid.NewGuid().ToString();
+
         public Action<IServiceProvider>? SeedCallback { get; set; }
 
         protected override void ConfigureWebHost(IWebHostBuilder builder)
@@ -20,7 +22,7 @@
 
                 // Register InMemory test DB
                 services.AddDbContext<AppDbContext>(options =>
-                    options.UseInMemoryDatabase("TestDb"));
+                    options.UseInMemoryDatabase(DatabaseName));
 
                 ServiceProvider sp = services.BuildServiceProvider();
 

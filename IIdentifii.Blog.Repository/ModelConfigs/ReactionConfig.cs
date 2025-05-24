@@ -9,10 +9,7 @@
 
             builder.HasKey(r => r.Id);
 
-            builder.HasIndex(r => new { r.BlogPostId, r.Type })
-                .IsUnique();
-
-            builder.HasIndex(r => new { r.BlogPostId, r.UserId, r.IsDeleted })
+            builder.HasIndex(r => new { r.BlogPostId, r.UserId, r.Type, r.IsDeleted })
                 .IsUnique();
 
             builder.Property(r => r.ReactedAt)

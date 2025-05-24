@@ -1,8 +1,10 @@
 ﻿namespace IIdentifii.Blog.Controllers
 {
     /// <summary>
-    /// Controller for handling API autentication requests.
-    /// </summary>    [ApiController]
+    /// Controller for handling API authentication requests.
+    /// </summary>    
+    [AllowAnonymous]
+    [ApiController]
     [Route("api/[controller]")]
     public class AuthController : ControllerBase
     {
@@ -29,7 +31,7 @@
         /// On success, returns a 201 Created with a JWT token and expiration details.
         /// On failure, returns 400 for invalid input or 401 for unauthorized credentials.
         /// </remarks>
-        /// <param name="login">The login request containing user credentials.</param>
+        /// <param name="request">The login request containing user credentials.</param>
         /// <returns>A token response with access and refresh tokens, or an error.</returns>
         [HttpPost("login")]
         [Consumes("application/json")]
@@ -40,11 +42,15 @@
         [SwaggerRequestExample(typeof(LoginRequest), typeof(LoginRequestExample))]
         [SwaggerResponseExample(StatusCodes.Status200OK, typeof(LoginResponse200Example))]
         public async Task<IActionResult> Login(
-            [FromBody] LoginRequest login)
+            [FromBody] LoginRequest request)
         {
-            ArgumentNullException.ThrowIfNull(login, nameof(login));
+            if (!ModelState.IsValid)
+            {
+                throw new IIdentifiiException("Model Is Invalid");
+            }
+            ArgumentNullException.ThrowIfNull(request, nameof(request));
 
-            ApiResponse<LoginResponse?> response = await _authService.GenerateJwtToken(login);
+            ApiResponse<LoginResponse?> response = await _authService.GenerateJwtToken(request);
 
             return response.ToResult();
         }

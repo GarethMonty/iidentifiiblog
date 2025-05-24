@@ -10,6 +10,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<PackageReference Include="Bogus" Version="35.6.3" />
 		<PackageReference Include="Mapster" Version="7.4.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="9.0.5" />
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.5" />
@@ -23,9 +24,11 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<Using Include="Bogus" />
 		<Using Include="Microsoft.AspNetCore.Identity" />
 		<Using Include="Swashbuckle.AspNetCore.Filters" />
 		<Using Include="System.ComponentModel.DataAnnotations" />
+		<Using Include="System.Net" />
 		<Using Include="System.Text.Json.Serialization" />
 	</ItemGroup>
 

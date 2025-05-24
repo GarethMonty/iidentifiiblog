@@ -28,6 +28,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Using Include="Bogus" />
 	  <Using Include="FluentAssertions" />
 	  <Using Include="IIdentifii.Blog.Repository" />
 	  <Using Include="IIdentifii.Blog.Shared" />
@@ -37,6 +38,7 @@
 	  <Using Include="Microsoft.AspNetCore.Mvc.Testing" />
 	  <Using Include="Microsoft.EntityFrameworkCore" />
 	  <Using Include="Microsoft.Extensions.DependencyInjection" />
+	  <Using Include="System.Net" />
 	  <Using Include="System.Net.Http.Json" />
 	  <Using Include="Xunit" />
 	</ItemGroup>

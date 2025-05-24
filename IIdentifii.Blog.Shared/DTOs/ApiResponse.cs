@@ -31,6 +31,12 @@
         public string? ErrorMessage { get; set; }
 
         /// <summary>
+        /// The list of errors returned when the request fails.
+        /// </summary>
+        [JsonPropertyName("errors")]
+        public List<string>? Errors { get; set; } = null;
+
+        /// <summary>
         /// Indicates whether the response contains data.
         /// </summary>
         [JsonIgnore]
@@ -64,15 +70,17 @@
         /// Returns a failure response with an error message and optional exception.
         /// </summary>
         /// <param name="errorMessage">The error message to include.</param>
+        /// <param name="errors">The errors to include</param>
         /// <param name="code">The HTTP status code (default is 400).</param>
         /// <param name="exception">Optional exception to log or debug with.</param>
-        public static ApiResponse<T> Failure(string errorMessage, int code = 400, Exception? exception = null)
+        public static ApiResponse<T> Failure(string errorMessage, List<string>? errors = null, int code = 400, Exception? exception = null)
         {
             return new ApiResponse<T>
             {
                 IsSuccess = false,
                 Code = code,
                 ErrorMessage = errorMessage,
+                Errors = errors,
                 Exception = exception
             };
         }

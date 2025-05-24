@@ -1,3 +1,4 @@
+using IIdentifii.Blog.Filters;
 using System.Text.Json.Serialization;
 
 namespace IIdentifii.Blog
@@ -19,11 +20,20 @@ namespace IIdentifii.Blog
                 .AddSettingServices(builder.Configuration)
                 .AddFeatureFlagServices();
 
-            builder.Services.AddControllers()
+            builder.Services.Configure<ApiBehaviorOptions>(options =>
+            {
+                options.SuppressModelStateInvalidFilter = true;
+            });
+
+            builder.Services
+                .AddControllers(options =>
+                {
+                    options.Filters.Add<ValidateModelAttribute>();
+                })
                 .AddJsonOptions(options =>
                 {
                     options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
-                }); ;
+                });
 
             builder.Services.AddRazorPages();
 
@@ -60,9 +70,7 @@ namespace IIdentifii.Blog
 
             await app.RunMigrationsAsync();
 
-            await app.SeedRolesAndUsersAsync();
-
-            await app.SeedBlogsAsync();
+            await app.SeedExampleDataAsync();
 
             await app.RunAsync();
         }

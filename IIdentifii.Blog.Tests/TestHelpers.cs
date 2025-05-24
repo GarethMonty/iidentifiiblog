@@ -1,4 +1,6 @@
 ﻿using System.Net.Http.Headers;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace IIdentifii.Blog.Tests
 {
@@ -44,5 +46,23 @@ namespace IIdentifii.Blog.Tests
 
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", loginResponse?.Data.Token);
         }
+
+        public static async Task<T?> ReadResponse<T>(HttpResponseMessage response)
+        {
+            var options = new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } };
+            return await response.Content.ReadFromJsonAsync<T>(options);
+        }
+
+        public static HttpRequestMessage JsonRequest(HttpMethod method, string url, object body)
+        {
+            return new HttpRequestMessage(method, url)
+            {
+                Content = JsonContent.Create(body, options: new JsonSerializerOptions
+                {
+                    Converters = { new JsonStringEnumConverter() }
+                })
+            };
+        }
+
     }
 }

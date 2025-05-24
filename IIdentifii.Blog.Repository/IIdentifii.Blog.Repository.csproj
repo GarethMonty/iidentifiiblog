@@ -26,6 +26,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Using Include="Bogus" />
     <Using Include="IIdentifii.Blog.Repository" />
     <Using Include="IIdentifii.Blog.Shared" />
     <Using Include="Microsoft.AspNetCore.Identity" />

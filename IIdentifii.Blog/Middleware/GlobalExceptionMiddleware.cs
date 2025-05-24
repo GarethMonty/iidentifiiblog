@@ -29,22 +29,24 @@
             }
             catch (IIdentifiiException iiEx)
             {
-                await CreateErrorResponse(context, iiEx.Message, iiEx.Code, iiEx);
+                await CreateErrorResponse(context, iiEx.Message, iiEx.Errors, iiEx.Code, iiEx);
             }
             catch (Exception ex)
             {
-                await CreateErrorResponse(context, ex.Message, StatusCodes.Status500InternalServerError, ex);
+                await CreateErrorResponse(context, ex.Message, null, StatusCodes.Status500InternalServerError, ex);
             }
         }
 
         private static async Task CreateErrorResponse(
             HttpContext context,
             string message,
+            List<string>? errors,
             int statusCode,
             Exception exception)
         {
             ApiResponse<object> errorResponse = ApiResponse<object>.Failure(
                 message,
+                errors,
                 statusCode,
                 exception);
 

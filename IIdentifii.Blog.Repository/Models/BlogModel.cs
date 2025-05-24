@@ -53,14 +53,15 @@
         }
 
         internal static BlogPostModel CreateSeedPost(
-            Guid id, 
+            Guid id,
             Guid userId,
             string title = "Sample Blog Post",
             string content = "This is a sample blog post content.",
             List<ReactionModel>? reactionModels = null,
             List<ReactionAggregateModel>? reactionAggregateModels = null,
             List<CommentModel>? commentModels = null,
-            List<TagModel>? tagModels = null)
+            List<TagModel>? tagModels = null,
+            bool isDeleted = false)
         {
             BlogPostModel blogPostModel = new BlogPostModel()
             {
@@ -72,7 +73,8 @@
                 Reactions = reactionModels ?? new List<ReactionModel>(),
                 ReactionAggregates = reactionAggregateModels ?? new List<ReactionAggregateModel>(),
                 Comments = commentModels ?? new List<CommentModel>(),
-                Tags = tagModels ?? new List<TagModel>()
+                Tags = tagModels ?? new List<TagModel>(),
+                IsDeleted = isDeleted,
             };
 
             return blogPostModel;
