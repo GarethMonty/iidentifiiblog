@@ -24,11 +24,11 @@
         {
             if (From is null && To is null)
             {
-                throw new ArgumentException("At least one of From or To must be provided.");
+                throw IIdentifiiException.Bad("At least one of From or To must be provided.");
             }
             else if (From is not null && To is not null && From > To)
             {
-                throw new ArgumentException("From date cannot be greater than To date.");
+                throw IIdentifiiException.Bad("From date cannot be greater than To date.");
             }
         }
     }

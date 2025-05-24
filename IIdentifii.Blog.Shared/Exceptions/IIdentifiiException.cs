@@ -31,21 +31,26 @@
 
         #region Static Methods
 
-        public static IIdentifiiException Create(
+        public static IIdentifiiException InternalServerError(
             string message,
-            Exception innerException,
-            int code = 500,
-            List<string>? errors = null,
-            bool isRetryable = false)
+            List<string>? errors = null)
         {
-            return new IIdentifiiException(message, innerException)
-            {
-                Code = code,
-                Errors = errors,
-                IsRetryable = isRetryable
-            };
+            return Create(message, 500, errors, false);
         }
 
+        public static IIdentifiiException Bad(
+            string message,
+            List<string>? errors = null)
+        {
+            return Create(message, 400, errors, false);
+        }
+
+        public static IIdentifiiException Unauthorized(
+            string message,
+            List<string>? errors = null)
+        {
+            return Create(message, 401, errors, false);
+        }
 
         public static IIdentifiiException Create(
             string message,
@@ -60,6 +65,7 @@
                 IsRetryable = isRetryable
             };
         }
+
         #endregion
     }
 }

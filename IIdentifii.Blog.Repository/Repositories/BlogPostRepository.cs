@@ -28,6 +28,8 @@
             BlogPostRequest blogPostRequest,
             CancellationToken token)
         {
+            blogPostRequest.Validate();
+
             ArgumentNullException.ThrowIfNull(blogPostRequest, nameof(blogPostRequest));
 
             IQueryable<BlogPostModel> baseQuery = _set

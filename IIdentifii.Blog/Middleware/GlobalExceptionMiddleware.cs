@@ -26,6 +26,11 @@
             try
             {
                 await _next(context);
+
+                if(context.Response.StatusCode == StatusCodes.Status403Forbidden)
+                {
+                    throw IIdentifiiException.Unauthorized("Access denied. You do not have permission to access this resource.");
+                }
             }
             catch (IIdentifiiException iiEx)
             {

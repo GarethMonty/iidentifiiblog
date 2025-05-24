@@ -49,12 +49,21 @@ namespace IIdentifii.Blog.Tests
 
         public static async Task<T?> ReadResponse<T>(HttpResponseMessage response)
         {
-            var options = new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } };
+            JsonSerializerOptions options = new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } };
+
             return await response.Content.ReadFromJsonAsync<T>(options);
         }
 
-        public static HttpRequestMessage JsonRequest(HttpMethod method, string url, object body)
+        public static HttpRequestMessage JsonRequest(
+            HttpMethod method, 
+            string url, 
+            object? body = null)
         {
+            if(body == null)
+            {
+                return new HttpRequestMessage(method, url);
+            }
+
             return new HttpRequestMessage(method, url)
             {
                 Content = JsonContent.Create(body, options: new JsonSerializerOptions

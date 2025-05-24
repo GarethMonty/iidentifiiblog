@@ -18,10 +18,22 @@
             List<IIdentifiiUser> users = IIDentifiiUserData.GetUsers(userCount);
             List<IIdentifiiUser> moderators = IIDentifiiUserData.GetUsers(moderatorCount);
 
-            List<BlogPostModel> posts = BlogPostData.GetPosts(postCount, users.Select(a => a.Id).ToList());
-            List<ReactionModel> reactions = ReactionData.GetReactions(reactionsCount, users.Select(a => a.Id).ToList(), posts.Select(a => a.Id).ToList());
-            List<CommentModel> comments = CommentData.GetComments(commentCount, users.Select(a => a.Id).ToList(), posts.Select(a => a.Id).ToList());
-            List<TagModel> tags = TagData.GetTags(tagCount, moderators.Select(a => a.Id).ToList(), posts.Select(a => a.Id).ToList());
+            List<Guid> userIdList = users.Select(a => a.Id).Append(SeedDataConstants.UserId).ToList();
+            List<Guid> moderatorIdList = users.Select(a => a.Id).Append(SeedDataConstants.ModeratorId).ToList();
+
+            List<BlogPostModel> posts = BlogPostData.GetPosts(postCount, userIdList);
+            posts.Add(BlogPostModel.CreateSeedPost(SeedDataConstants.BlogPostId, SeedDataConstants.UserId, "Sample Blog Post", "This is a sample blog post content."));
+
+            List<Guid> postIdList = posts.Select(a => a.Id).ToList();
+
+            List<ReactionModel> reactions = ReactionData.GetReactions(reactionsCount, userIdList, postIdList);
+            reactions.AddRange(ReactionModel.CreateSeedReaction(SeedDataConstants.ReactionId, SeedDataConstants.BlogPostId, SeedDataConstants.UserId));
+
+            List<CommentModel> comments = CommentData.GetComments(commentCount, userIdList, postIdList);
+            comments.Add(CommentModel.CreateSeedComment(SeedDataConstants.CommentId, SeedDataConstants.UserId, SeedDataConstants.BlogPostId, "This is a sample comment content."));
+
+            List<TagModel> tags = TagData.GetTags(tagCount, moderatorIdList, postIdList);
+            tags.Add(TagModel.CreateSeedTag(SeedDataConstants.TagId, SeedDataConstants.BlogPostId, SeedDataConstants.ModeratorId, TagType.FalseInformation));
 
             //Add constant roles
             await AddRoles(roleManager);

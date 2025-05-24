@@ -26,6 +26,16 @@
 
         public async Task<List<ReactionModel>> GetReactionsAsync(
             Guid blogPostId,
+            CancellationToken token)
+        {
+            return await _set
+                .AsNoTracking()
+                .Where(x => x.BlogPostId == blogPostId)
+                .ToListAsync(token);
+        }
+
+        public async Task<List<ReactionModel>> GetReactionsByTypeAsync(
+            Guid blogPostId,
             ReactionType type,
             CancellationToken token)
         {

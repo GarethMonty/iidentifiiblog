@@ -22,7 +22,7 @@
         /// The response payload data (e.g. an object, list, or result value).
         /// </summary>
         [JsonPropertyName("data")]
-        public T Data { get; set; }
+        public T? Data { get; set; }
 
         /// <summary>
         /// The error message returned when the request fails.

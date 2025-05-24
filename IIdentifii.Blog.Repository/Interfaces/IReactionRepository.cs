@@ -3,6 +3,10 @@
     public interface IReactionRepository
     {
         Task<List<ReactionModel>> GetReactionsAsync(
+            Guid blogPostId, 
+            CancellationToken token);
+
+        Task<List<ReactionModel>> GetReactionsByTypeAsync(
             Guid blogPostId,
             ReactionType type,
             CancellationToken token);

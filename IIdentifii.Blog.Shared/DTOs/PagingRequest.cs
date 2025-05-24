@@ -26,11 +26,11 @@
         {
             if (Page <= 0)
             {
-                throw new ArgumentOutOfRangeException(nameof(Page), "Page must be greater than 0.");
+                throw IIdentifiiException.Bad("Page must be greater than 0.");
             }
             else if (PageSize <= 0)
             {
-                throw new ArgumentOutOfRangeException(nameof(PageSize), "PageSize must be greater than 0.");
+                throw IIdentifiiException.Bad("PageSize must be greater than 0.");
             }
         }
     }

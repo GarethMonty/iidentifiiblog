@@ -13,7 +13,7 @@ namespace IIdentifii.Blog.Filters
                     .Select(kvp => $"{kvp.Key}: {string.Join(',', kvp.Value?.Errors?.Select(a=> a.ErrorMessage).ToList()?? new List<string>())}")
                     .ToList();
 
-                throw IIdentifiiException.Create("Model Is Invalid", StatusCodes.Status400BadRequest, errors, false); 
+                throw IIdentifiiException.Bad("Model Is Invalid", errors); 
             }
         }
     }

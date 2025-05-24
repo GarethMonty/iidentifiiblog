@@ -37,7 +37,7 @@
             ReactionType type,
             CancellationToken token)
         {
-            List<ReactionModel> models = await _likeRepository.GetReactionsAsync(blogPostId, type, token);
+            List<ReactionModel> models = await _likeRepository.GetReactionsByTypeAsync(blogPostId, type, token);
 
             return ApiResponse<List<Reaction>>.Success(models.Adapt<List<Reaction>>());
         }
