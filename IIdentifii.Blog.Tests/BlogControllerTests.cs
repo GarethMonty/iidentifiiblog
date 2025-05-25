@@ -176,7 +176,7 @@
                 db.SaveChanges();
             });
 
-            var request = new BlogPostRequest
+            BlogPostRequest request = new BlogPostRequest
             {
                 Paging = new PagingRequest
                 {
@@ -185,7 +185,7 @@
                 }
             };
 
-            var response = await client.SendAsync(TestHelpers.JsonRequest(HttpMethod.Get, "/api/blog/post", request));
+            HttpResponseMessage response = await client.SendAsync(TestHelpers.JsonRequest(HttpMethod.Get, "/api/blog/post", request));
 
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
         }
@@ -200,8 +200,6 @@
 
                 db.SaveChanges();
             });
-
-            await TestHelpers.PreAuthAsync(client);
 
             // Act
             HttpResponseMessage response = await client.SendAsync(TestHelpers.JsonRequest(HttpMethod.Get, $"/api/blog/post/{SeedDataConstants.BlogPostId}"));
@@ -226,8 +224,6 @@
 
                 db.SaveChanges();
             });
-
-            await TestHelpers.PreAuthAsync(client);
 
             // Act
             HttpResponseMessage response = await client.SendAsync(TestHelpers.JsonRequest(HttpMethod.Get, $"/api/blog/post/{Guid.NewGuid()}"));
@@ -301,6 +297,30 @@
             result.Should().NotBeNull();
             result.Code.Should().Be(StatusCodes.Status400BadRequest);
             result.Data.Should().BeNull();
+        }
+
+        [Fact]
+        public async Task CreateBlogPost_NoAuth()
+        {
+            // Arrange
+            (CustomWebApplicationFactory<Program> factory, HttpClient client) = TestHelpers.GetClient(services =>
+            {
+                AppDbContext db = services.GetRequiredService<AppDbContext>();
+
+                db.SaveChanges();
+            });
+
+            UpdateBlogPostRequest createBlogPostRequest = new UpdateBlogPostRequest()
+            {
+                Title = new string('*', 50),
+                Content = new string('*', 5000),
+            };
+
+            // Act
+            HttpResponseMessage response = await client.SendAsync(TestHelpers.JsonRequest(HttpMethod.Post, $"/api/blog/post", createBlogPostRequest));
+
+            // Assert
+            response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
         }
 
         [Fact]

@@ -3,7 +3,6 @@ namespace IIdentifii.Blog.Controllers
     /// <summary>
     /// Controller for managing comments on blog posts, including create, read, update, and delete operations.
     /// </summary>
-    [Authorize]
     [Route("api/blog/post/{blogPostId:guid}/comment")]
     [ApiController]
     public class CommentController : ControllerBase

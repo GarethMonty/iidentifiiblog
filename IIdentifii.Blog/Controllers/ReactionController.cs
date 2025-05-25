@@ -3,7 +3,6 @@ namespace IIdentifii.Blog.Controllers
     /// <summary>
     /// Controller for managing likes on blog posts, including creating, removing, retrieving likes and reaction count.
     /// </summary>
-    [Authorize]
     [ApiController]
     [Route("api/blog/post/{blogPostId:guid}/reaction/{reactionType}")]
     public class ReactionController : ControllerBase
@@ -122,7 +121,7 @@ namespace IIdentifii.Blog.Controllers
                 return ApiResponse<Reaction>.Failure($"User not found").ToResult();
             }
 
-            ApiResponse<Reaction> response = await _likeService.CreateReactionAsync(blogPostId, userId, reactionType, token);
+            ApiResponse<Reaction> response = await _likeService.ChangeReactionAsync(blogPostId, userId, reactionType, previous, token);
 
             return response.ToResult();
         }

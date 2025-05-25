@@ -16,16 +16,23 @@
             ReactionType type,
             CancellationToken token);
 
+        Task<ApiResponse<Reaction>> GetReactionAsync(
+            Guid blogPostId,
+            Guid userId,
+            ReactionType type,
+            CancellationToken token);
+
         Task<ApiResponse<Reaction>> CreateReactionAsync(
             Guid blogPostId,
             Guid userId,
             ReactionType type,
             CancellationToken token);
 
-        Task<ApiResponse<Reaction>> GetReactionAsync(
+        Task<ApiResponse<Reaction>> ChangeReactionAsync(
             Guid blogPostId,
             Guid userId,
             ReactionType type,
+            ReactionType previousType,
             CancellationToken token);
 
         Task<ApiResponse<bool>> DeleteReactionAsync(

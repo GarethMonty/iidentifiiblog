@@ -30,6 +30,8 @@
         {
             ArgumentNullException.ThrowIfNull(request, nameof(request));
 
+            request.Validate();
+
             IQueryable<CommentModel> baseQuery = _set
                 .BeginFilter(request)
                 .ApplyBlogPostFilter()
@@ -60,6 +62,7 @@
         {
             return await _set
                 .AsNoTracking()
+                .Include(c=> c.User)
                 .FirstOrDefaultAsync(x => x.Id == commentId, token);
         }
 

@@ -80,6 +80,19 @@
             return reaction;
         }
 
+        public async Task<ReactionModel> UpdateReactionAsync(
+            ReactionModel reaction,
+            CancellationToken token)
+        {
+            ArgumentNullException.ThrowIfNull(reaction, nameof(reaction));
+
+            _set.Update(reaction);
+
+            await _dbContext.SaveChangesAsync(token);
+
+            return reaction;
+        }
+
         public async Task<bool> DeleteReactionAsync(
             Guid blogPostId,
             Guid userId,

@@ -284,6 +284,30 @@ namespace IIdentifii.Blog.Tests
         }
 
         [Fact]
+        public async Task CreateComment_NoAuth()
+        {
+            // Arrange
+            (CustomWebApplicationFactory<Program> factory, HttpClient client) = TestHelpers.GetClient(services =>
+            {
+                AppDbContext db = services.GetRequiredService<AppDbContext>();
+
+                db.SaveChanges();
+            });
+
+            UpdateCommentRequest createCommentRequest = new UpdateCommentRequest()
+            {
+                Content = new string('*', 5000),
+            };
+
+            // Act
+            HttpResponseMessage response = await client.SendAsync(TestHelpers.JsonRequest(HttpMethod.Post, $"/api/blog/post/{SeedDataConstants.BlogPostId}/comment", createCommentRequest));
+
+            // Assert
+            response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
+        }
+
+
+        [Fact]
         public async Task UpdateComment_GoodValue()
         {
             // Arrange
@@ -298,6 +322,7 @@ namespace IIdentifii.Blog.Tests
 
             UpdateCommentRequest updateCommentRequest = new UpdateCommentRequest()
             {
+                Id = SeedDataConstants.CommentId,
                 Content = "Updated Test Content"
             };
 
@@ -345,6 +370,30 @@ namespace IIdentifii.Blog.Tests
         }
 
         [Fact]
+        public async Task UpdateComment_NoAuth()
+        {
+            // Arrange
+            (CustomWebApplicationFactory<Program> factory, HttpClient client) = TestHelpers.GetClient(services =>
+            {
+                AppDbContext db = services.GetRequiredService<AppDbContext>();
+
+                db.SaveChanges();
+            });
+
+            UpdateCommentRequest updateCommentRequest = new UpdateCommentRequest()
+            {
+                Content = new string('*', 500),
+            };
+
+            // Act
+            HttpResponseMessage response = await client.SendAsync(TestHelpers.JsonRequest(HttpMethod.Patch, $"/api/blog/post/{SeedDataConstants.BlogPostId}/comment", updateCommentRequest));
+
+            // Assert
+            response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
+        }
+
+
+        [Fact]
         public async Task DeleteComment_GoodValue()
         {
             // Arrange
@@ -389,8 +438,27 @@ namespace IIdentifii.Blog.Tests
             ApiResponse<bool>? result = await TestHelpers.ReadResponse<ApiResponse<bool>>(response);
 
             result.Should().NotBeNull();
-            result.Code.Should().Be(StatusCodes.Status400BadRequest);
+            result.Code.Should().Be(StatusCodes.Status404NotFound);
             result.Data.Should().BeFalse();
         }
+
+        [Fact]
+        public async Task DeleteComment_NoAuth()
+        {
+            // Arrange
+            (CustomWebApplicationFactory<Program> factory, HttpClient client) = TestHelpers.GetClient(services =>
+            {
+                AppDbContext db = services.GetRequiredService<AppDbContext>();
+
+                db.SaveChanges();
+            });
+
+            // Act
+            HttpResponseMessage response = await client.SendAsync(TestHelpers.JsonRequest(HttpMethod.Delete, $"/api/blog/post/{SeedDataConstants.BlogPostId}/comment/{Guid.NewGuid()}"));
+
+            // Assert
+            response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
+        }
+
     }
 }

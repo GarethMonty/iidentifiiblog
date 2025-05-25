@@ -18,7 +18,8 @@ namespace IIdentifii.Blog
                 .AddBackgroundProcessingServices()
                 .AddDocumentationServices()
                 .AddSettingServices(builder.Configuration)
-                .AddFeatureFlagServices();
+                .AddFeatureFlagServices()
+                .AddMappingServices();
 
             builder.Services.Configure<ApiBehaviorOptions>(options =>
             {

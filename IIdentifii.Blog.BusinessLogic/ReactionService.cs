@@ -62,7 +62,7 @@
 
             if (model is null)
             {
-                return ApiResponse<Reaction>.NotFound($"Reaction with for blog post [{blogPostId}] and user [{userId}] not found");
+                return ApiResponse<Reaction>.NotFound($"Reaction [{type}] for blog post [{blogPostId}] and user [{userId}] not found");
             }
 
             return ApiResponse<Reaction>.Success(model.Adapt<Reaction>());
@@ -88,6 +88,31 @@
             return ApiResponse<Reaction>.Success(createdModel.Adapt<Reaction>());
         }
 
+        public async Task<ApiResponse<Reaction>> ChangeReactionAsync(
+            Guid blogPostId,
+            Guid userId,
+            ReactionType type,
+            ReactionType previousType,
+            CancellationToken token)
+        {
+            ReactionModel? model = await _likeRepository.GetReactionByIdAsync(blogPostId, userId, previousType, token);
+
+            if (model is null)
+            {
+                return ApiResponse<Reaction>.NotFound($"Reaction [{previousType}] for blog post [{blogPostId}] and user [{userId}] not found");
+            }
+            else if (model.UserId != userId)
+            {
+                return ApiResponse<Reaction>.Unauthorized($"User {userId} is not authorized to update this reaction");
+            }
+
+            model.Type = type;
+
+            ReactionModel createdModel = await _likeRepository.UpdateReactionAsync(model, token);
+
+            return ApiResponse<Reaction>.Success(createdModel.Adapt<Reaction>());
+        }
+
         public async Task<ApiResponse<bool>> DeleteReactionAsync(
             Guid blogPostId,
             Guid userId,
@@ -99,6 +124,10 @@
             if (model is null)
             {
                 return ApiResponse<bool>.NotFound($"Reaction with for blog post [{blogPostId}] and user [{userId}] not found");
+            }
+            else if (model.UserId != userId)
+            {
+                return ApiResponse<bool>.Unauthorized($"User {userId} is not authorized to delete this reaction");
             }
 
             bool deleted = await _likeRepository.DeleteReactionAsync(blogPostId, userId, type, token);

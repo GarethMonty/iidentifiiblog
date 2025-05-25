@@ -26,6 +26,10 @@
             ReactionModel reaction,
             CancellationToken token);
 
+        Task<ReactionModel> UpdateReactionAsync(
+            ReactionModel reaction, 
+            CancellationToken token);
+
         Task<bool> DeleteReactionAsync(
             Guid blogPostId,
             Guid userId,

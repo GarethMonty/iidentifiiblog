@@ -22,7 +22,7 @@ namespace Microsoft.AspNetCore.Builder
         {
             using IServiceScope scope = app.Services.CreateScope();
 
-            if (app.Environment.IsEnvironment("Testing"))
+            if (app.Environment.IsEnvironment("Testing") || app.Environment.IsEnvironment("Development"))
             {
                 AppDbContext db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
 
