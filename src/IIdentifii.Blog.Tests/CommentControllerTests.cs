@@ -416,6 +416,9 @@ namespace IIdentifii.Blog.Tests
 
             result.Should().NotBeNull();
             result.Data.Should().BeTrue();
+
+            HttpResponseMessage getResponse = await client.SendAsync(TestHelpers.JsonRequest(HttpMethod.Get, $"/api/blog/post/{SeedDataConstants.BlogPostId}"));
+            result.Code.Should().Be(StatusCodes.Status404NotFound);
         }
 
         [Fact]

@@ -85,6 +85,8 @@
 
             ReactionModel createdModel = await _likeRepository.AddReactionAsync(model, token);
 
+            await _reactionHandler.QueueReactionAsync(ReactionOperation.Create(createdModel, ReactionOperationType.Add), token);
+
             return ApiResponse<Reaction>.Success(createdModel.Adapt<Reaction>());
         }
 
@@ -108,9 +110,11 @@
 
             model.Type = type;
 
-            ReactionModel createdModel = await _likeRepository.UpdateReactionAsync(model, token);
+            ReactionModel updatedReaction = await _likeRepository.UpdateReactionAsync(model, token);
 
-            return ApiResponse<Reaction>.Success(createdModel.Adapt<Reaction>());
+            await _reactionHandler.QueueReactionAsync(ReactionOperation.Create(updatedReaction, ReactionOperationType.Update, previousType), token);
+
+            return ApiResponse<Reaction>.Success(updatedReaction.Adapt<Reaction>());
         }
 
         public async Task<ApiResponse<bool>> DeleteReactionAsync(
@@ -131,6 +135,8 @@
             }
 
             bool deleted = await _likeRepository.DeleteReactionAsync(blogPostId, userId, type, token);
+
+            await _reactionHandler.QueueReactionAsync(ReactionOperation.Create(model, ReactionOperationType.Remove), token);
 
             return ApiResponse<bool>.Success(deleted);
         }

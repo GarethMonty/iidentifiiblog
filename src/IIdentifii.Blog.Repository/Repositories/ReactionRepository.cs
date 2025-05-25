@@ -63,7 +63,6 @@
             CancellationToken token)
         {
             return await _set
-                .AsNoTracking()
                 .FirstOrDefaultAsync(x => x.BlogPostId == blogPostId && x.UserId == userId && x.Type == type, token);
         }
 

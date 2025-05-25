@@ -63,7 +63,6 @@
             CancellationToken token)
         {
             return await _set
-                .AsNoTracking()
                 .Include(x => x.Author)
                 .Include(x => x.Comments)
                 .Include(x => x.Tags)

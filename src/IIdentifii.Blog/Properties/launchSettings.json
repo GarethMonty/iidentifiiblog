@@ -16,6 +16,26 @@
       "dotnetRunMessages": true,
       "applicationUrl": "https://localhost:7113;http://localhost:5249"
     },
+    "Login UI": {
+      "launchUrl": "https://localhost:7113/Identity/Account/Login",
+      "launchBrowser": true,
+      "commandName": "Project",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "dotnetRunMessages": true,
+      "applicationUrl": "https://localhost:7113;http://localhost:5249"
+    },
+    "Docs": {
+      "launchUrl": "https://localhost:7113/docs",
+      "launchBrowser": true,
+      "commandName": "Project",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "dotnetRunMessages": true,
+      "applicationUrl": "https://localhost:7113;http://localhost:5249"
+    },
     "Container (.NET SDK)": {
       "commandName": "SdkContainer",
       "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}",

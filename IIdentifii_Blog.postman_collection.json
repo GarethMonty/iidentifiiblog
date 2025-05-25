@@ -1,0 +1,1167 @@
+{
+	"info": {
+		"_postman_id": "b4e4f047-ed12-49ca-8c5d-6a18d0e996e9",
+		"name": "IIdentifii - Blog",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "3297701"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Get Token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();\r",
+									"\r",
+									"pm.collectionVariables.set('token', jsonData.data.token)  "
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"{{userName}}\",\r\n    \"password\": \"{{password}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/auth/login",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Blog",
+			"item": [
+				{
+					"name": "Comments",
+					"item": [
+						{
+							"name": "Get Post Comments",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"blogPostId\": \"{{blogPostId}}\",\r\n  \"userId\": \"{{userId}}\",\r\n  \"dateFilter\": {\r\n    \"from\": \"2020-01-01\",\r\n    \"to\": \"2025-05-24\"\r\n  },\r\n  \"filter\": {\r\n    \"query\": \"\"\r\n  },\r\n  \"paging\": {\r\n    \"page\": 1,\r\n    \"pageSize\": 20\r\n  }\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/blog/post/{{blogPostId}}/comment",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"blog",
+										"post",
+										"{{blogPostId}}",
+										"comment"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Post Comment",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/blog/post/{{blogPostId}}/comment/{{commentId}}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"blog",
+										"post",
+										"{{blogPostId}}",
+										"comment",
+										"{{commentId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create Post Comment",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"blogPostId\": \"{{blogPostId}}\",\r\n    \"content\": \"A Test Comment\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/blog/post/comment",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"blog",
+										"post",
+										"comment"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Post Comment",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"id\": \"{{commentId}}\",\r\n    \"content\": \"Updated Post Comment!!\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/blog/post/{{blogPostId}}/comment",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"blog",
+										"post",
+										"{{blogPostId}}",
+										"comment"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Post Comment",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/blog/post/{{blogPostId}}/comment/{{commentId}}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"blog",
+										"post",
+										"{{blogPostId}}",
+										"comment",
+										"{{commentId}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Reactions",
+					"item": [
+						{
+							"name": "Get Post Reactions",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/blog/post/{{blogPostId}}/reaction/{{reactionType}}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"blog",
+										"post",
+										"{{blogPostId}}",
+										"reaction",
+										"{{reactionType}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Post Reaction",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/blog/post/{{blogPostId}}/reaction/{{reactionType}}/count",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"blog",
+										"post",
+										"{{blogPostId}}",
+										"reaction",
+										"{{reactionType}}",
+										"count"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create Post Reaction",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/blog/post/{{blogPostId}}/reaction/{{reactionType}}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"blog",
+										"post",
+										"{{blogPostId}}",
+										"reaction",
+										"{{reactionType}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Change Post Reaction",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PATCH",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/blog/post/{{blogPostId}}/reaction/{{reactionType_dislike}}?previous={{reactionType}}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"blog",
+										"post",
+										"{{blogPostId}}",
+										"reaction",
+										"{{reactionType_dislike}}"
+									],
+									"query": [
+										{
+											"key": "previous",
+											"value": "{{reactionType}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Post Reaction",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/blog/post/{{blogPostId}}/reaction/{{reactionType}}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"blog",
+										"post",
+										"{{blogPostId}}",
+										"reaction",
+										"{{reactionType}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Tags (Moderations)",
+					"item": [
+						{
+							"name": "Get Post Tags (Moderations)",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/blog/post/{{blogPostId}}/tag",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"blog",
+										"post",
+										"{{blogPostId}}",
+										"tag"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Post Tag (Moderation)",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/blog/post/{{blogPostId}}/tag/{{tagId}}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"blog",
+										"post",
+										"{{blogPostId}}",
+										"tag",
+										"{{tagId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create Post Tag (Moderation)",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{moderatorToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"blogPostId\": \"{{blogPostId}}\",\r\n    \"type\": \"Misleading\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/blog/post/{{blogPostId}}/tag",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"blog",
+										"post",
+										"{{blogPostId}}",
+										"tag"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Post Tag (Moderation)",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{moderatorToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"id\": \"{{tagId}}\",\r\n    \"type\": \"FalseInformation\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/blog/post/{{blogPostId}}/tag",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"blog",
+										"post",
+										"{{blogPostId}}",
+										"tag"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Post Tag (Moderation)",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{moderatorToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/blog/post/{{blogPostId}}/tag/{{tagId}}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"blog",
+										"post",
+										"{{blogPostId}}",
+										"tag",
+										"{{tagId}}"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"packages": {},
+								"exec": [
+									"pm.sendRequest({\r",
+									"    url: pm.collectionVariables.get(\"baseUrl\") + \"/api/auth/login\",\r",
+									"    method: 'POST',\r",
+									"    header: {\r",
+									"        'Content-Type': 'application/json'\r",
+									"    },\r",
+									"    body: {\r",
+									"        mode: 'raw',\r",
+									"        raw: JSON.stringify({\r",
+									"            email: pm.collectionVariables.get(\"moderatorUserName\"),\r",
+									"            password: pm.collectionVariables.get(\"moderatorPassword\")\r",
+									"        })\r",
+									"    }\r",
+									"}, function (err, res) {\r",
+									"    if (err) {\r",
+									"        console.error(\"Login failed\", err);\r",
+									"        return;\r",
+									"    }\r",
+									"\r",
+									"    const json = res.json();\r",
+									"    if (json.data.token) {\r",
+									"        pm.collectionVariables.set(\"moderatorToken\", json.data.token);\r",
+									"        console.log(\"Moderator Token refreshed\");\r",
+									"    }\r",
+									"});"
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"packages": {},
+								"exec": [
+									""
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "Posts",
+					"item": [
+						{
+							"name": "Get Blog Posts",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"authorId\": null,\r\n  \"dateFilter\": {\r\n    \"from\": \"2020-01-01\",\r\n    \"to\": \"2025-05-24\"\r\n  },\r\n  \"filter\": {\r\n    \"query\": \"\"\r\n  },\r\n  \"paging\": {\r\n    \"page\": 1,\r\n    \"pageSize\": 20\r\n  }\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/blog/post",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"blog",
+										"post"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Blog Post",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/blog/post/{{blogPostId}}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"blog",
+										"post",
+										"{{blogPostId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create Blog Post",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"title\": \"Test Blog Post 2\",\r\n    \"content\": \"This is a test post content 2\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/blog/post",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"blog",
+										"post"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Blog Post",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"id\": \"{{blogPostId}}\",\r\n    \"title\": \"Updated Title\",\r\n    \"content\": \"Updated Blog Post Content!!\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/blog/post/{{blogPostId}}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"blog",
+										"post",
+										"{{blogPostId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Blog Post",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/blog/post/{{blogPostId}}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"blog",
+										"post",
+										"{{blogPostId}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							"pm.sendRequest({\r",
+							"    url: pm.collectionVariables.get(\"baseUrl\") + \"/api/auth/login\",\r",
+							"    method: 'POST',\r",
+							"    header: {\r",
+							"        'Content-Type': 'application/json'\r",
+							"    },\r",
+							"    body: {\r",
+							"        mode: 'raw',\r",
+							"        raw: JSON.stringify({\r",
+							"            email: pm.collectionVariables.get(\"userName\"),\r",
+							"            password: pm.collectionVariables.get(\"password\")\r",
+							"        })\r",
+							"    }\r",
+							"}, function (err, res) {\r",
+							"    if (err) {\r",
+							"        console.error(\"Login failed\", err);\r",
+							"        return;\r",
+							"    }\r",
+							"\r",
+							"    const json = res.json();\r",
+							"    if (json.data.token) {\r",
+							"        pm.collectionVariables.set(\"token\", json.data.token);\r",
+							"        console.log(\"Token refreshed\");\r",
+							"    }\r",
+							"});"
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "https://localhost:7113",
+			"type": "string"
+		},
+		{
+			"key": "userName",
+			"value": "user@example.com",
+			"type": "string"
+		},
+		{
+			"key": "password",
+			"value": "User123!",
+			"type": "string"
+		},
+		{
+			"key": "moderatorUserName",
+			"value": "moderator@example.com",
+			"type": "string"
+		},
+		{
+			"key": "moderatorPassword",
+			"value": "Moderator123!",
+			"type": "string"
+		},
+		{
+			"key": "token",
+			"value": ""
+		},
+		{
+			"key": "moderatorToken",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "blogPostId",
+			"value": "8a267f6e-8b93-4274-b39c-5427263d2eb6",
+			"type": "string"
+		},
+		{
+			"key": "userId",
+			"value": "b66734cc-8584-494c-6b29-08dd991f81eb",
+			"type": "string"
+		},
+		{
+			"key": "commentId",
+			"value": "d5d404b1-5516-486c-8ae6-05cc3e124d50",
+			"type": "string"
+		},
+		{
+			"key": "reactionType",
+			"value": "like",
+			"type": "string"
+		},
+		{
+			"key": "reactionType_dislike",
+			"value": "dislike",
+			"type": "string"
+		},
+		{
+			"key": "moderatorId",
+			"value": "bfe2743a-8bd7-431e-6b28-08dd991f81eb",
+			"type": "string"
+		},
+		{
+			"key": "tagId",
+			"value": "7a055382-928b-4427-b9b1-58603a224b4c",
+			"type": "string"
+		}
+	]
+}

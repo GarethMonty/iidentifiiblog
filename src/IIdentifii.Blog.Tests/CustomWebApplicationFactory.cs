@@ -22,7 +22,9 @@
 
                 // Register InMemory test DB
                 services.AddDbContext<AppDbContext>(options =>
-                    options.UseInMemoryDatabase(DatabaseName));
+                    options
+                        .UseInMemoryDatabase(DatabaseName)
+                        .AddInterceptors(new SoftDeleteInterceptor()));
 
                 ServiceProvider sp = services.BuildServiceProvider();
 

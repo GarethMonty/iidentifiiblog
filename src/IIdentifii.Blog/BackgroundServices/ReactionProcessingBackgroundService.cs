@@ -1,8 +1,4 @@
-﻿using IIdentifii.Blog.Repository;
-using Microsoft.Extensions.Caching.Memory;
-using System.Diagnostics;
-
-namespace IIdentifii.Blog
+﻿namespace IIdentifii.Blog
 {
     public class ReactionProcessingBackgroundService : BackgroundService
     {
@@ -103,7 +99,7 @@ namespace IIdentifii.Blog
 
                     }
 
-                    if (trackedCount == null || trackedCount >= 100 || stopwatch.Elapsed > TimeSpan.FromSeconds(5))
+                    if (trackedCount == null || trackedCount >= 100 || stopwatch.Elapsed > TimeSpan.FromSeconds(3))
                     {
                         await reactionAggregateRepository.SaveReactionChangesAsync(stoppingToken);
 

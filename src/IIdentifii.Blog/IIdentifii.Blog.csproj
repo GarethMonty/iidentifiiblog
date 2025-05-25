@@ -44,12 +44,14 @@
 		<Using Include="Microsoft.AspNetCore.Authorization" />
 		<Using Include="Microsoft.AspNetCore.Identity" />
 		<Using Include="Microsoft.AspNetCore.Mvc" />
+		<Using Include="Microsoft.Extensions.Caching.Memory" />
 		<Using Include="Microsoft.FeatureManagement" />
 		<Using Include="Microsoft.FeatureManagement.Mvc" />
 		<Using Include="Microsoft.IdentityModel.Tokens" />
 		<Using Include="Microsoft.OpenApi.Models" />
 		<Using Include="Swashbuckle.AspNetCore.Annotations" />
 		<Using Include="Swashbuckle.AspNetCore.Filters" />
+		<Using Include="System.Diagnostics" />
 		<Using Include="System.Reflection" />
 		<Using Include="System.Text" />
 		<Using Include="System.Threading.Channels" />

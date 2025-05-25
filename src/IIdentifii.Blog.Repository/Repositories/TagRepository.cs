@@ -39,7 +39,6 @@
             CancellationToken token)
         {
             return await _set
-                .AsNoTracking()
                 .FirstOrDefaultAsync(x => x.Id == tagId, token);
         }
 

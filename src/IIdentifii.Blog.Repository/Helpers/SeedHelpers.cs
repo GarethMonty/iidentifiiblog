@@ -22,17 +22,15 @@
             List<Guid> moderatorIdList = users.Select(a => a.Id).Append(SeedDataConstants.ModeratorId).ToList();
 
             List<BlogPostModel> posts = BlogPostData.GetPosts(postCount, userIdList);
-            posts.Add(BlogPostModel.CreateSeedPost(SeedDataConstants.BlogPostId, SeedDataConstants.UserId, "Sample Blog Post", "This is a sample blog post content."));
-
             List<Guid> postIdList = posts.Select(a => a.Id).ToList();
 
             List<ReactionModel> reactions = ReactionData.GetReactions(reactionsCount, userIdList, postIdList);
-            reactions.AddRange(ReactionModel.CreateSeedReaction(SeedDataConstants.ReactionId, SeedDataConstants.BlogPostId, SeedDataConstants.UserId));
-
             List<CommentModel> comments = CommentData.GetComments(commentCount, userIdList, postIdList);
-            comments.Add(CommentModel.CreateSeedComment(SeedDataConstants.CommentId, SeedDataConstants.UserId, SeedDataConstants.BlogPostId, "This is a sample comment content."));
-
             List<TagModel> tags = TagData.GetTags(tagCount, moderatorIdList, postIdList);
+
+            posts.Add(BlogPostModel.CreateSeedPost(SeedDataConstants.BlogPostId, SeedDataConstants.UserId, "Sample Blog Post", "This is a sample blog post content."));
+            reactions.AddRange(ReactionModel.CreateSeedReaction(SeedDataConstants.ReactionId, SeedDataConstants.BlogPostId, SeedDataConstants.UserId));
+            comments.Add(CommentModel.CreateSeedComment(SeedDataConstants.CommentId, SeedDataConstants.UserId, SeedDataConstants.BlogPostId, "This is a sample comment content."));
             tags.Add(TagModel.CreateSeedTag(SeedDataConstants.TagId, SeedDataConstants.BlogPostId, SeedDataConstants.ModeratorId, TagType.FalseInformation));
 
             //Add constant roles

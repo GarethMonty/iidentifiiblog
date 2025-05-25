@@ -61,7 +61,6 @@
             CancellationToken token)
         {
             return await _set
-                .AsNoTracking()
                 .Include(c=> c.User)
                 .FirstOrDefaultAsync(x => x.Id == commentId, token);
         }

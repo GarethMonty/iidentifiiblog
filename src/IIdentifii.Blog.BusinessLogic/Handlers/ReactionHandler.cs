@@ -1,6 +1,4 @@
-﻿using System.Threading.Channels;
-
-namespace IIdentifii.Blog.BusinessLogic
+﻿namespace IIdentifii.Blog.BusinessLogic
 {
     public class ReactionHandler : IReactionHandler
     {

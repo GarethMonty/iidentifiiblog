@@ -42,7 +42,6 @@ namespace IIdentifii.Blog.Repository
             CancellationToken token)
         {
             return await _set
-                .AsNoTracking()
                 .FirstOrDefaultAsync(x => x.BlogPostId == blogPostId && x.Type == type, token);
         }
 
