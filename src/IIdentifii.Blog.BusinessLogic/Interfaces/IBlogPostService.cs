@@ -4,10 +4,12 @@
     {
         Task<PagedApiResponse<BlogPost>> GetBlogPostsAsync(
             BlogPostRequest request,
+            Guid userId,
             CancellationToken token);
 
         Task<ApiResponse<BlogPost>> GetBlogPostAsync(
             Guid id,
+            Guid userId,
             CancellationToken token);
 
         Task<ApiResponse<BlogPost>> CreateBlogPostAsync(

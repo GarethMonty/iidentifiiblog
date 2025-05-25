@@ -9,6 +9,8 @@ namespace IIdentifii.Blog.Controllers
     {
         #region Fields
 
+        private readonly IRequestContextService _requestContextService;
+
         private readonly IBlogPostService _blogPostService;
 
         #endregion
@@ -16,8 +18,11 @@ namespace IIdentifii.Blog.Controllers
         #region Constructor Methods
 
         public BlogController(
+            IRequestContextService requestContextService,
             IBlogPostService blogPostService)
         {
+            _requestContextService = requestContextService;
+
             _blogPostService = blogPostService;
         }
 
@@ -43,7 +48,9 @@ namespace IIdentifii.Blog.Controllers
             [FromBody] BlogPostRequest request,
             CancellationToken token)
         {
-            PagedApiResponse<BlogPost> pagedResponse = await _blogPostService.GetBlogPostsAsync(request, token);
+            _requestContextService.TryGetUserId(out Guid userId);
+
+            PagedApiResponse<BlogPost> pagedResponse = await _blogPostService.GetBlogPostsAsync(request, userId, token);
 
             return pagedResponse.ToResult();
         }
@@ -63,7 +70,9 @@ namespace IIdentifii.Blog.Controllers
             [FromRoute] Guid blogPostId,
             CancellationToken token)
         {
-            ApiResponse<BlogPost> response = await _blogPostService.GetBlogPostAsync(blogPostId, token);
+            _requestContextService.TryGetUserId(out Guid userId);
+
+            ApiResponse<BlogPost> response = await _blogPostService.GetBlogPostAsync(blogPostId, userId, token);
 
             return response.ToResult();
         }

@@ -26,6 +26,7 @@
 
         public async Task<PagedResultModel<BlogPostModel>> GetBlogPostsAsync(
             BlogPostRequest blogPostRequest,
+            Guid userId,
             CancellationToken token)
         {
             blogPostRequest.Validate();
@@ -33,7 +34,7 @@
             ArgumentNullException.ThrowIfNull(blogPostRequest, nameof(blogPostRequest));
 
             IQueryable<BlogPostModel> baseQuery = _set
-                .BeginFilter(blogPostRequest)
+                .BeginFilter(blogPostRequest, userId)
                 .ApplyAuthorFilter()
                 .ApplyDateFilter()
                 .ApplyTextQueryFilter()
@@ -60,13 +61,16 @@
 
         public async Task<BlogPostModel?> GetBlogPostAsync(
             Guid id,
+            Guid userId,
             CancellationToken token)
         {
-            return await _set
+            IQueryable<BlogPostModel> query = _set
                 .Include(x => x.Author)
                 .Include(x => x.Comments)
                 .Include(x => x.Tags)
-                .FirstOrDefaultAsync(x => x.Id == id, token);
+                .Include(x => x.Reactions.Where(r => r.UserId == userId && !r.IsDeleted));
+
+            return await query.FirstOrDefaultAsync(x => x.Id == id, token);
         }
 
         public async Task<BlogPostModel> CreateBlogPostAsync(
@@ -99,7 +103,7 @@
             Guid id,
             CancellationToken token)
         {
-            BlogPostModel? blogPostModel = await GetBlogPostAsync(id, token);
+            BlogPostModel? blogPostModel = await GetBlogPostAsync(id, Guid.Empty, token);
 
             if (blogPostModel is null)
             {

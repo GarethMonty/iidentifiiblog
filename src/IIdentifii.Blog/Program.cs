@@ -1,6 +1,3 @@
-using IIdentifii.Blog.Filters;
-using System.Text.Json.Serialization;
-
 namespace IIdentifii.Blog
 {
     public class Program
@@ -11,9 +8,9 @@ namespace IIdentifii.Blog
 
             builder.Services
                 .AddAuthServices(builder.Configuration)
+                .AddCacheServices()
                 .AddContextServices()
                 .AddBusinessLogicServices()
-                .AddCacheServices()
                 .AddRepositoryServices(builder.Environment, builder.Configuration)
                 .AddBackgroundProcessingServices()
                 .AddDocumentationServices()
@@ -59,6 +56,10 @@ namespace IIdentifii.Blog
             app.MapRazorPages();
 
             app.MapControllers();
+
+            app.MapControllerRoute(
+                name: "default",
+                pattern: "{controller=Home}/{action=Index}/{id?}");
 
             app.MapSwagger();
 

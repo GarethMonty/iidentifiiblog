@@ -24,7 +24,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\IIdentifii.Blog\IIdentifii.Blog.csproj" />
+	  <ProjectReference Include="..\IIdentifii.Blog\IIdentifii.Blog.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

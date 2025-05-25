@@ -4,13 +4,15 @@
     {
         public static (IQueryable<BlogPostModel>, IFilterable) BeginFilter(
             this IQueryable<BlogPostModel> query,
-            BlogPostRequest blogPostRequest)
+            BlogPostRequest blogPostRequest,
+            Guid userId)
         {
             query = query
                 .AsNoTracking()
                 .Include(x => x.Author)
                 .Include(x => x.Tags)
                     .ThenInclude(t=> t.Moderator)
+                .Include(x=> x.Reactions.Where(r=> r.UserId == userId && !r.IsDeleted))
                 .Include(x => x.ReactionAggregates);
 
             return (query, blogPostRequest);

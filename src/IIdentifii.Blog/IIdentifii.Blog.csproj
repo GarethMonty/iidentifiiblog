@@ -38,8 +38,10 @@
 	<ItemGroup>
 		<Using Include="IIdentifii.Blog" />
 		<Using Include="IIdentifii.Blog.BusinessLogic" />
+		<Using Include="IIdentifii.Blog.Filters" />
 		<Using Include="IIdentifii.Blog.Repository" />
 		<Using Include="IIdentifii.Blog.Shared" />
+		<Using Include="Mapster" />
 		<Using Include="Microsoft.AspNetCore.Authentication.JwtBearer" />
 		<Using Include="Microsoft.AspNetCore.Authorization" />
 		<Using Include="Microsoft.AspNetCore.Identity" />
@@ -54,6 +56,7 @@
 		<Using Include="System.Diagnostics" />
 		<Using Include="System.Reflection" />
 		<Using Include="System.Text" />
+		<Using Include="System.Text.Json.Serialization" />
 		<Using Include="System.Threading.Channels" />
 	</ItemGroup>
 

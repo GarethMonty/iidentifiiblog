@@ -44,6 +44,12 @@
         public Dictionary<ReactionType, int> Reactions { get; set; } = new();
 
         /// <summary>
+        /// If the user has reacted to the post, this indicates their reaction type.
+        /// </summary>
+        [JsonPropertyName("reaction")]
+        public ReactionType? Reaction { get; set; }
+
+        /// <summary>
         /// Comments made on the blog post.
         /// </summary>
         [JsonPropertyName("comments")]

@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\IIdentifii.Blog.Cache\IIdentifii.Blog.Cache.csproj" />
+    <ProjectReference Include="..\IIdentifii.Blog.Repository\IIdentifii.Blog.Repository.csproj" />
   </ItemGroup>
 
   <ItemGroup>

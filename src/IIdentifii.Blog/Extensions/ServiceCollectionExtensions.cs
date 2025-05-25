@@ -1,6 +1,4 @@
-﻿using Mapster;
-
-namespace Microsoft.Extensions.DependencyInjection
+﻿namespace Microsoft.Extensions.DependencyInjection
 {
     public static class ServiceCollectionExtensions
     {
@@ -60,9 +58,25 @@ namespace Microsoft.Extensions.DependencyInjection
             services
                 .AddAuthentication(options =>
                 {
-                    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                    options.DefaultScheme = "DynamicScheme";
+                    options.DefaultAuthenticateScheme = "DynamicScheme";
+                    options.DefaultChallengeScheme = "DynamicScheme";
                 })
+                .AddPolicyScheme("DynamicScheme", "Select auth scheme based on request", options =>
+                {
+                    options.ForwardDefaultSelector = context =>
+                    {
+                        bool hasBearer = context.Request.Headers["Authorization"].FirstOrDefault()?.StartsWith("Bearer ", StringComparison.OrdinalIgnoreCase) ?? false;
+
+                        bool hasIdentityCookie = context.Request.Cookies.ContainsKey(".AspNetCore.Identity.Application");
+
+                        return hasBearer
+                            ? JwtBearerDefaults.AuthenticationScheme
+                            : hasIdentityCookie
+                                ? IdentityConstants.ApplicationScheme
+                                : JwtBearerDefaults.AuthenticationScheme;
+                    };
+                })                
                 //JWT Bearer Auth
                 .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
                 {
@@ -79,6 +93,15 @@ namespace Microsoft.Extensions.DependencyInjection
                         IssuerSigningKey = new SymmetricSecurityKey(key)
                     };
                 });
+
+            return services;
+        }
+
+        public static IServiceCollection AddCacheServices(
+            this IServiceCollection services)
+        {
+            services
+                .AddMemoryCache();
 
             return services;
         }
@@ -171,7 +194,9 @@ namespace Microsoft.Extensions.DependencyInjection
             TypeAdapterConfig<BlogPostModel, BlogPost>.NewConfig()
                 .Map(dest => dest.Reactions,
                      src => src.ReactionAggregates
-                                .ToDictionary(ra => ra.Type, ra => ra.Count));
+                                .ToDictionary(ra => ra.Type, ra => ra.Count))
+                .Map(dest => dest.Reaction,
+                     src => src.Reactions.Count > 0 ? src.Reactions.First().Type : ReactionType.None);
             return services;
         }
 

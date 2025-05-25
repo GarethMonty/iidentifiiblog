@@ -27,9 +27,10 @@
 
         public async Task<PagedApiResponse<BlogPost>> GetBlogPostsAsync(
             BlogPostRequest request,
+            Guid userId,
             CancellationToken token)
         {
-            PagedResultModel<BlogPostModel> pagedModels = await _blogPostRepository.GetBlogPostsAsync(request, token);
+            PagedResultModel<BlogPostModel> pagedModels = await _blogPostRepository.GetBlogPostsAsync(request, userId, token);
 
             return PagedApiResponse<BlogPost>.Success(
                 data: pagedModels.Items.Adapt<List<BlogPost>>(), 
@@ -40,9 +41,10 @@
 
         public async Task<ApiResponse<BlogPost>> GetBlogPostAsync(
             Guid id,
+            Guid userId,
             CancellationToken token)
         {
-            BlogPostModel? model = await _blogPostRepository.GetBlogPostAsync(id, token);
+            BlogPostModel? model = await _blogPostRepository.GetBlogPostAsync(id, userId, token);
 
             if (model is null)
             {
@@ -74,7 +76,7 @@
             UpdateBlogPostRequest updateRequest,
             CancellationToken token)
         {
-            BlogPostModel? model = await _blogPostRepository.GetBlogPostAsync(updateRequest.Id, token);
+            BlogPostModel? model = await _blogPostRepository.GetBlogPostAsync(updateRequest.Id, Guid.Empty, token);
 
             if (model is null)
             {
