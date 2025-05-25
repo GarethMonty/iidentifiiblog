@@ -54,3 +54,4 @@ CodeCoverage/
 *.VisualState.xml
 TestResult.xml
 nunit-*.xml
+/src/IIdentifii.Blog/IIdentifii.Blog.csproj.user

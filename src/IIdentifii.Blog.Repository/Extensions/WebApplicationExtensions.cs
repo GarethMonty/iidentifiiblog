@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Hosting;
+using System.Runtime.InteropServices;
 
 namespace Microsoft.AspNetCore.Builder
 {
@@ -8,7 +9,7 @@ namespace Microsoft.AspNetCore.Builder
             this WebApplication app, 
             CancellationToken token = default)
         {
-            if (app.Environment.IsEnvironment("Testing"))
+            if (app.Environment.IsEnvironment("Testing") || !RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
                 return;
             }

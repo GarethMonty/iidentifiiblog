@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Hosting;
+using System.Runtime.InteropServices;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -18,9 +19,19 @@ namespace Microsoft.Extensions.DependencyInjection
 
             if (!environment.IsEnvironment("Testing"))
             {
-                services.AddDbContext<AppDbContext>(options =>
-                    options.UseSqlServer(connectionString)
-                    .AddInterceptors(new SoftDeleteInterceptor()));
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                {
+                    services.AddDbContext<AppDbContext>(options =>
+                        options.UseSqlServer(connectionString)
+                        .AddInterceptors(new SoftDeleteInterceptor()));
+                }
+                else
+                {
+                    services.AddDbContext<AppDbContext>(options =>
+                        options
+                            .UseInMemoryDatabase("LocalDB")
+                            .AddInterceptors(new SoftDeleteInterceptor()));
+                }
             }
 
             services
